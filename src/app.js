@@ -6,6 +6,15 @@ const { NODE_ENV } = require('./config')
 const cors = require('cors');
 const {CLIENT_ORIGIN} = require('./config');
 
+const authRouter = require('./auth/auth-router')
+const apparatusRouter = require('./apparatus/apparatus-router')
+const ageRouter = require('./age/age-router')
+const actionRouter = require('./action/action-router')
+const classRouter = require('./class/class-router')
+const levelRouter = require('./level/level-router')
+const priorityRouter = require('./priority/priority-router')
+const skillRouter = require('./skill/skill-router')
+
 
 const app = express()
 
@@ -20,6 +29,16 @@ app.use(
         origin: CLIENT_ORIGIN
     })
 );
+app.use('/api/auth', authRouter)
+app.use('/api/apparatus', apparatusRouter)
+app.use('/api/age', ageRouter)
+app.use('/api/action', actionRouter)
+app.use('/api/class', classRouter)
+app.use('/api/level', levelRouter)
+app.use('/api/priority', priorityRouter)
+app.use('/api/skill', skillRouter)
+
+
 
 app.get('/api/', (req, res) => {
    res.json({ok:true});

@@ -1,0 +1,3 @@
+ALTER TABLE name 
+	ADD COLUMN skill_id INTEGER
+;
