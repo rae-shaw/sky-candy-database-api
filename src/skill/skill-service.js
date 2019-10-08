@@ -25,8 +25,8 @@ const SkillService = {
 
 	basicSkillQuery(knex) {
 		return knex
-			.from('skill')
 			.select('*')
+			.from('skill')
 			//.groupBy('skill.id', 'primaryname.name')
 	},
 	// 	return knex

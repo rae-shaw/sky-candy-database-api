@@ -21,7 +21,7 @@ describe('age Endpoints', function() {
 
 	after('disconnect from db', () => db.destroy())
 
-	describe('GET /api/age/', () => {
+	describe.only('GET /api/age/', () => {
 		context('Given no age', () => {
 			it('responds with 200 and an empty list', () => {
 				return supertest(app)
