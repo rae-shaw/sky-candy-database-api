@@ -209,7 +209,7 @@ const jwt = require('jsonwebtoken')
             prerequisites: 'intro series',
             warm_up: 'example warm-up here',
             video: 'https://examplevideolink.com'
-        },
+        }
         ];
     }
 

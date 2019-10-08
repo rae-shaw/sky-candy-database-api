@@ -25,9 +25,9 @@ const SkillService = {
 
 	basicSkillQuery(knex) {
 		return knex
+			.from('skill')
 			.select('*')
-			.from('all_skills')
-			.groupBy('skill.id', 'primaryname.name')
+			//.groupBy('skill.id', 'primaryname.name')
 	},
 	// 	return knex
 	// 		.select('skill.id', 'primaryname.name' ).select(knex.raw(STRING_AGG ('alternatename.name as alternate_names'))
@@ -43,14 +43,26 @@ const SkillService = {
 	// 		.groupBy('skill.id', 'primaryname.name'))
 	// },
 
-	getByName(knex, skillName) {
-		baseQuery = basicSkillQuery(knex);
-		return baseQuery.where()
-	},
+	// getByName(knex, skillName) {
+	// 	baseQuery = basicSkillQuery(knex);
+	// 	return baseQuery.where()
+	// },
 
-	addNameFilter(knex, skillName) {
-		return knex.where()
-	}
+	// addNameFilter(knex, skillName) {
+	// 	return knex.where()
+	// },
+	deleteSkill(knex, id){
+   		return knex('skill')
+     		.where({ id })
+     		.delete()
+  	},
+  	getById(knex, id){
+   		return knex
+     		.from('skill')
+     		.select('*')
+     		.where({ id })
+     		.first()
+  },
 }
 
 module.exports = SkillService
