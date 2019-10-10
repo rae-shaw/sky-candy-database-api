@@ -29,6 +29,7 @@ app.use(
         origin: CLIENT_ORIGIN
     })
 );
+
 app.use('/api/auth', authRouter)
 app.use('/api/apparatus', apparatusRouter)
 app.use('/api/age', ageRouter)
@@ -37,12 +38,6 @@ app.use('/api/class', classRouter)
 app.use('/api/level', levelRouter)
 app.use('/api/priority', priorityRouter)
 app.use('/api/skill', skillRouter)
-
-
-
-app.get('/api/', (req, res) => {
-   res.json({ok:true});
- });
 
 
 app.use(function errorHandler(error, req, res, next) {

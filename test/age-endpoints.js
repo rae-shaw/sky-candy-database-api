@@ -15,13 +15,14 @@ describe('age Endpoints', function() {
 		db.debug()
 	})
 
-	before('cleanup', () => { helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
+	before('cleanup', () => { 
+		return helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
 
   	afterEach('cleanup', () => { helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
 
 	after('disconnect from db', () => db.destroy())
 
-	describe.only('GET /api/age/', () => {
+	describe('GET /api/age/', () => {
 		context('Given no age', () => {
 			it('responds with 200 and an empty list', () => {
 				return supertest(app)
@@ -32,15 +33,19 @@ describe('age Endpoints', function() {
 		context('Given there are ages in the database', () => {
 			const testAge = helpers.makeAgeArray()
 
-			beforeEach('insert age', () => {
-				db.insert(testAge).into('age').returning('id').catch(function(error) { console.error(error); })
+			beforeEach('insert age', async function() {
+				return await db.insert(testAge).into('age').returning('id').catch(function(error) { console.error(error); })
 			})
 
 
 			it('GET /api/age responds with 200 and all of the notes', () =>{
 				return supertest(app)
-					.get('/api/age/')
-					.expect(200, testAge)
+					.get('/api/age')
+					.expect( res => {
+						expect(res.body).to.eql(testAge)
+						expect(res.body[0]).to.have.property("id")
+						.catch(function(error) { console.error(error) }); 
+					})
 			})
 				
 		})
@@ -58,9 +63,8 @@ describe('age Endpoints', function() {
 		context(`Given there are ages in the database`, () => {
 			const testAge = helpers.makeAgeArray()
 
-
 			beforeEach('insert age', async function() { 
-				await db.insert(testAge).into('age').returning('id').catch(function(error) { console.error(error); })
+				return await db.insert(testAge).into('age').returning('id').catch(function(error) { console.error(error); })
 			})
 
 			it('GET /api/age/:id responds with 200 and the specified age', () => {
@@ -155,7 +159,7 @@ describe('age Endpoints', function() {
 			const testAge = helpers.makeAgeArray()
 
 			beforeEach('insert age', async function() {
-				await db.insert(testAge).into('age').returning('id')
+				return await db.insert(testAge).into('age').returning('id')
 
 			})
 

@@ -1,0 +1,1 @@
+DROP VIEW all_skills;

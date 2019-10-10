@@ -1,98 +1,112 @@
 const SkillService = {
-	// basicSkillQuery(knex, skill)
-	// 	return knex
-	// 		.select('id', 'primary_name_id', 'apparatus_id', 'level_id', 'age_id', 'priority_id', 'class_id', 'action_id', 'details', 'prequisites', 'warm_up', 'video')
-	// 		.join('apparatus', 'skill.apparatus_id', 'apparatus.id')
-	// 		.join('action', 'skill.action_id', 'action.id')
-	// 		.join('age', 'skill.age_id', 'age.id')
-	// 		.join('class', 'skill.class_id', 'class.id')
-	// 		.join('level', 'skill.level_id', 'level.id')
-	// 		.join('priority', 'skill.priority_id', 'priority.id')
-	// 		.join('name as primaryname', 'skill.primary_name_id', 'primaryname.id')
-	// 	}
-	// getByName(knex, name){
-	// 	return knex
-	// 		.select('*')
-	// 		.where({ 'primary_name' : name })
-	// 		.orWhere({ 'alt_name' : name })
-	// 		.first()
-	// 	},
 
-
-// knexObj = knex.select()
-
-// knexObj2 = knexObj.join()
 
 	basicSkillQuery(knex) {
 		return knex
 			.select('*')
-			.from('skill')
+			.from('all_skills')
 			//.groupBy('skill.id', 'primaryname.name')
 	},
-	// 	return knex
-	// 		.select('skill.id', 'primaryname.name' ).select(knex.raw(STRING_AGG ('alternatename.name as alternate_names'))
-	// 		.from('skill')
-	// 		.join('apparatus', 'skill.apparatus_id', 'apparatus.id')
-	// 		.join('action', 'skill.action_id', 'action.id')
-	// 		.join('age', 'skill.age_id', 'age.id')
-	// 		.join('class', 'skill.class_id', 'class.id')
-	// 		.join('level', 'skill.level_id', 'level.id')
-	// 		.join('priority', 'skill.priority_id', 'priority.id')
-	// 		.join('name as primaryname', 'skill.primary_name_id', 'primaryname.id')
-	// 		.join('name as alternatename', '(skill.id = alternatename.skill_id and skill.primary_name_id != alternatename.id)')
-	// 		.groupBy('skill.id', 'primaryname.name'))
-	// },
 
-	// getByName(knex, skillName) {
-	// 	baseQuery = basicSkillQuery(knex);
-	// 	return baseQuery.where()
-	// },
+	getSkills(knex, queryParams) {
+		console.log("** ** ** ", queryParams)
+		//validate query params
+		let query = knex
+			.select('all_skills.*')
+			.from('all_skills')
+			.where(queryParams)
+		return query
+	},
+		
 
-	// addNameFilter(knex, skillName) {
-	// 	return knex.where()
-	// },
-	deleteSkill(knex, id){
-   		return knex('skill')
-     		.where({ id })
-     		.delete()
-  	},
+
+
+	// deleteSkill(knex, id){
+ //   		return knex('skill')
+ //     		.where({ id })
+ //     		.delete()
+ //  	},
   	getById(knex, id){
    		return knex
      		.from('skill')
      		.select('*')
      		.where({ id })
      		.first()
-  },
+  	},
+  	updateSkill(knex, id, updatedFields){
+		return knex('skill')
+			.where({ id })
+			.update(updatedFields)
+	}
+// 	addSkill(knex, name, skillFields) {
+// 		return knex('skill')
+// 			.transaction(function(trx){
+
+// 				// let primaryNameId = await knex
+// 				// .insert(skillFields.primaryname)
+// 				// .into('name')
+// 				// .transacting(trx)
+// 				// .returning('id')
+// 				// .then()
+
+// 				// let 
+
+// 				knex
+// 				.insert(skillFields.primaryname)
+// 				.into('name')
+// 				.transacting(trx)
+// 				.returning('id')
+// 				.then(function(primaryNameId){
+// 					knex
+// 					.insert(skillFields)
+// 					.into('skill')
+// 					.returning('id'))
+// 					.transacting(trx)
+// 					.then(function(skill_id) {
+// 						// altNames.forEach()
+// 						//for each name that isn't primaryname
+// 						//await knex.insert(name[i]). ... .transacting(trx).then()
+
+// 						// Update the primary name row that doesn't have skill_id yet
+// 						// You know primaryNameId to find the row
+// 						// You know skill_id to update the row.
+// 						//await that too
+// 					})
+// 				})
+// 				if(primaryname)
+// 					thing I want it to do
+// 				otherwise just
+// 			//if the skill is the primary name, use the id to insert into the 'skill.primary_id'
+// 				//then, insert the skill id into the name table
+// 			//otherwise, update the skill table and then insert the skill id into the name table
+// 			//have 2 different services? Or within the service?
+// 			})
+// 	}
+// knex.transaction(function(trx) {
+
+//   knex.insert({name: 'Old Books'}, 'id')
+//     .into('catalogues')
+//     .transacting(trx)
+//     .then(function(ids) {
+//       books.forEach((book) => book.catalogue_id = ids[0]);
+//       return knex('books').insert(books).transacting(trx);
+//     })
+//     .then(trx.commit)
+//     .catch(trx.rollback);
+// })
+// .then(function(inserts) {
+//   console.log(inserts.length + ' new books saved.');
+// })
+// .catch(function(error) {
+//   // If we get here, that means that neither the 'Old Books' catalogues insert,
+//   // nor any of the books inserts will have taken place.
+//   console.error(error);
+// });
+// 	},
 }
 
 module.exports = SkillService
 
 	
-// SELECT skill.id, primaryname.name, STRING_AGG (alternatename.name, ';') as "alternate_names"
-// FROM skill
-// JOIN apparatus ON skill.apparatus_id = apparatus.id
-// JOIN action ON skill.action_id = action.id
-// JOIN age ON skill.age_id = age.id
-// JOIN class ON skill.class_id = class.id
-// JOIN level ON skill.level_id = level.id
-// JOIN priority ON skill.priority_id = priority.id
-// JOIN name as primaryname ON skill.primary_name_id = primaryname.id
-// JOIN name AS alternatename ON (skill.id = alternatename.skill_id and skill.primary_name_id != alternatename.id)
-// GROUP BY skill.id, primaryname.name;
 
-
-// SELECT skill.id, 
-//   primaryname.name,
-//   (select STRING_AGG (alternatename.name, ';') as "alternate_names" 
-//   	from name as alternatename 
-//   	where skill.id = alternatename.skill_id and skill.primary_name_id != alternatename.id
-//   	)
-// FROM skill
-// JOIN apparatus ON skill.apparatus_id = apparatus.id
-// JOIN action ON skill.action_id = action.id
-// JOIN age ON skill.age_id = age.id
-// JOIN class ON skill.class_id = class.id
-// JOIN level ON skill.level_id = level.id
-// JOIN priority ON skill.priority_id = priority.id
-// JOIN name as primaryname ON skill.primary_name_id = primaryname.id
 
