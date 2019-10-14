@@ -38,10 +38,14 @@ describe('apparatus Endpoints', function() {
 			})
 
 
-			it('GET /api/apparatus responds with 200 and all of the notes', () =>{
+			it('GET /api/apparatus responds with 200 and all of the apparatus', () =>{
 				return supertest(app)
 					.get('/api/apparatus/')
-					.expect(200, testApparatus)
+					.expect(200)
+					.expect( res => {
+						expect(res.body.apparatus).to.eql(testApparatus.apparatus)
+						//expect(res.body).to.have.property('id')
+					})
 			})
 				
 		})
@@ -115,10 +119,13 @@ describe('apparatus Endpoints', function() {
 			it('GET /api/apparatus/:id responds with 200 and the specified apparatus', () => {
 				const apparatusId = 2
 				const expectedApparatus = testApparatus[apparatusId-1]
-				console.log('expectedApparatus', expectedApparatus)
 				return supertest(app)
 					.get(`/api/apparatus/${apparatusId}`)
-					.expect(200, expectedApparatus)
+					.expect(200)
+					.expect( res => {
+						expect(res.body.apparatus).to.eql(expectedApparatus.apparatus)
+						expect(res.body).to.have.property('id')
+					})
 			})
 		})
 	})

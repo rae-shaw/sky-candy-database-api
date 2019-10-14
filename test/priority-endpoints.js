@@ -15,9 +15,11 @@ describe('priority Endpoints', function() {
 		db.debug()
 	})
 
-	before('cleanup', () => { helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
+	before('cleanup', () => { 
+		return helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
 
-  	afterEach('cleanup', () => { helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
+  	afterEach('cleanup', () => { 
+  		return helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
   	
 	after('disconnect from db', () => db.destroy())
 
@@ -32,15 +34,19 @@ describe('priority Endpoints', function() {
 		context('Given there are priorities in the database', () => {
 			const testPriorities = helpers.makePriorityArray()
 
-			beforeEach('insert priorities', () => {
-				db.insert(testPriorities).into('priority').returning('id').catch(function(error) { console.error(error); })
+			beforeEach('insert priorities', async function() {
+				return await db.insert(testPriorities).into('priority').returning('id').catch(function(error) { console.error(error); })
 			})
 
 
 			it('GET /api/priority responds with 200 and all of the priorities', () => {
 				return supertest(app)
 					.get('/api/priority/')
-					.expect(200, testPriorities)
+					.expect(200)
+					.expect( res => {
+						expect(res.body.priority).to.eql(testPriorities.priority)
+						//expect(res.body).to.have.property('id')
+					})
 			})
 				
 		})
@@ -105,7 +111,11 @@ describe('priority Endpoints', function() {
 				console.log('expectedPriority', expectedPriority)
 				return supertest(app)
 					.get(`/api/priority/${priorityId}`)
-					.expect(200, expectedPriority)
+					.expect(200)
+					.expect( res => {
+						expect(res.body.priority).to.eql(expectedPriority.priority)
+						expect(res.body).to.have.property('id')
+					})
 			})
 		})
 	})

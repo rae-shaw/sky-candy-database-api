@@ -24,7 +24,7 @@ describe('skill Endpoints', function() {
 
 	after('disconnect from db', () => db.destroy())
 
-	describe.only('GET /api/skill', () => {
+	describe('GET /api/skill', () => {
 		context('Given no skills', () => {
 			it('responds with 200 and an empty list', () => {
 				return supertest(app)
@@ -181,7 +181,7 @@ describe('skill Endpoints', function() {
 				const updateSkill = {
 					details: 'updated details',
             		prerequisites: 'updated series',
-            		warm_up: 'updatedwarm-up here',
+            		warm_up: 'updated warm-up here',
             		video: 'https://updatedvideolink.com'
 				}
 				const expectedSkill = {

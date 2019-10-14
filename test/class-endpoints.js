@@ -40,7 +40,11 @@ describe('class Endpoints', function() {
 			it('GET /api/action responds with 200 and all of the classes', () => {
 				return supertest(app)
 					.get('/api/class/')
-					.expect(200, testClasses)
+					.expect(200)
+					.expect( res => {
+						expect(res.body.class).to.eql(testClasses.class)
+						//expect(res.body).to.have.property('id')
+					})
 			})
 				
 		})
@@ -105,7 +109,11 @@ describe('class Endpoints', function() {
 				console.log('expectedClass', expectedClass)
 				return supertest(app)
 					.get(`/api/class/${classId}`)
-					.expect(200, expectedClass)
+					.expect(201)
+					.expect( res => {
+						expect(res.body.class).to.eql(expectedClass.class)
+						expect(res.body).to.have.property('id')
+					})
 			})
 		})
 	})

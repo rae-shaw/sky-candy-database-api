@@ -15,7 +15,8 @@ describe('level Endpoints', function() {
 		db.debug()
 	})
 
-	before('cleanup', () => { helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
+	before('cleanup', () => { 
+		return helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
 
   	afterEach('cleanup', () => { helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
 
@@ -40,7 +41,11 @@ describe('level Endpoints', function() {
 			it('GET /api/level responds with 200 and all of the levels', () => {
 				return supertest(app)
 					.get('/api/level/')
-					.expect(200, testLevels)
+					.expect(200)
+					.expect( res => {
+						expect(res.body.level).to.eql(testLevels.level)
+						//expect(res.body).to.have.property('id')
+					})
 			})
 				
 		})
@@ -103,7 +108,11 @@ describe('level Endpoints', function() {
 				console.log('expectedLevel', expectedLevel)
 				return supertest(app)
 					.get(`/api/level/${levelId}`)
-					.expect(200, expectedLevel)
+					.expect(200)
+					.expect( res => {
+						expect(res.body.level).to.eql(expectedLevel.level)
+						expect(res.body).to.have.property('id')
+					})
 			})
 		})
 	})

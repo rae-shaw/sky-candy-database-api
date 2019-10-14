@@ -3,7 +3,7 @@ const knex = require('knex')
 const app = require('../src/app')
 const helpers = require('./test-helpers')
 
-describe('age Endpoints', function() {
+describe.only('age Endpoints', function() {
 	let db 
 
 	before('make knex instance', () => {
@@ -12,13 +12,13 @@ describe('age Endpoints', function() {
 			connection: process.env.TEST_DB_URL,
 		})
 		app.set('db', db)
-		db.debug()
 	})
 
 	before('cleanup', () => { 
 		return helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
 
-  	afterEach('cleanup', () => { helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
+  	afterEach('cleanup', () => { 
+  		return helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
 
 	after('disconnect from db', () => db.destroy())
 
@@ -42,9 +42,9 @@ describe('age Endpoints', function() {
 				return supertest(app)
 					.get('/api/age')
 					.expect( res => {
-						expect(res.body).to.eql(testAge)
+						expect(res.body.age).to.eql(testAge.age)
 						expect(res.body[0]).to.have.property("id")
-						.catch(function(error) { console.error(error) }); 
+						//.catch(function(error) { console.error(error) }); 
 					})
 			})
 				
@@ -73,7 +73,10 @@ describe('age Endpoints', function() {
 				console.log('expectedAge', expectedAge)
 				return supertest(app)
 					.get(`/api/age/${ageId}`)
-					.expect(200, expectedAge)
+					.expect( res => {
+						expect(200)
+						expect(res.body.age).to.eql(expectedAge.age)
+					})
 			})
 		})
 	})

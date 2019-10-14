@@ -41,7 +41,11 @@ describe('action Endpoints', function() {
 				console.log ('test actions', testActions)
 				return supertest(app)
 					.get('/api/action/')
-					.expect(200, testActions)
+					.expect(200)
+					.expect( res => {
+						expect(res.body.action).to.eql(testActions.action)
+						//expect(res.body).to.have.property('id')
+					})
 			})
 				
 		})
@@ -108,7 +112,11 @@ describe('action Endpoints', function() {
 				console.log('expectedAction', expectedAction)
 				return supertest(app)
 					.get(`/api/action/${actionId}`)
-					.expect(200, expectedAction)
+					.expect(200)
+					.expect( res => {
+						expect(res.body.action).to.eql(expectedAction.action)
+						//expect(res.body).to.have.property('id')
+					})
 			})
 		})
 	})
