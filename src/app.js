@@ -14,6 +14,9 @@ const classRouter = require('./class/class-router')
 const levelRouter = require('./level/level-router')
 const priorityRouter = require('./priority/priority-router')
 const skillRouter = require('./skill/skill-router')
+const nameRouter = require('./name/name-router')
+// const skillNameRouter = require('./skill/skill-router')
+// const skillIdRouter = require('./skill/skill-router')
 
 
 const app = express()
@@ -37,7 +40,11 @@ app.use('/api/action', actionRouter)
 app.use('/api/class', classRouter)
 app.use('/api/level', levelRouter)
 app.use('/api/priority', priorityRouter)
+app.use('api/alternatename', nameRouter)
 app.use('/api/skill', skillRouter)
+app.use('api/skill/id/:id', skillRouter)
+app.use('api/name/:name', skillRouter)
+
 
 
 app.use(function errorHandler(error, req, res, next) {

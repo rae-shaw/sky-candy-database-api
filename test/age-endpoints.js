@@ -3,7 +3,7 @@ const knex = require('knex')
 const app = require('../src/app')
 const helpers = require('./test-helpers')
 
-describe.only('age Endpoints', function() {
+describe('age Endpoints', function() {
 	let db 
 
 	before('make knex instance', () => {
@@ -109,7 +109,7 @@ describe.only('age Endpoints', function() {
 					expect(res.body).to.have.property('id')
 				})
 				.then(res => {
-					supertest(app)
+					return supertest(app)
 					.get(`/api/age/${res.body.id}`)
 					.expect(res.body)
 				})
@@ -130,7 +130,7 @@ describe.only('age Endpoints', function() {
 			const testAge = helpers.makeAgeArray()
 
 			beforeEach('insert age', async function() {
-				await db.insert(testAge).into('age').returning('id')
+				return await db.insert(testAge).into('age').returning('id')
 
 			})
 			it('removes the age by ID', () => {
@@ -179,7 +179,7 @@ describe.only('age Endpoints', function() {
 				.patch(`/api/age/${idToUpdate}`)
 				.send(updateAge)
 				.expect(204)
-				then( res =>
+				then( res => 
 					supertest(app)
 						.get(`/api/age/${idToUpdate}`)
 						.expect(expectedAge)

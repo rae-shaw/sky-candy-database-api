@@ -16,11 +16,32 @@ skillRouter
 			})
 		.catch(next)
 	})
+	.post(jsonParser, (req, res, next) => {
+		const { name, action, age, apparatus, class, level, priority, details, prerequisites, warm_up, video } = req.body
+
+			for(const [key,value] of Object.entries(req.body)) {
+			if (value == null) {
+				return res.status(400).json({
+					error: { message: `Need at least one field to add in request body`}
+				})
+			}
+		}
+		SKillService.insertSkill(
+			req.app.get('db'),
+			req.body
+		)
+			.then(age => {
+				res
+					.status(201)
+					.json(skill)
+			})
+			.catch(next)
+	})
 
 skillRouter
 	.route('/id/:id') // This route is for returning exactly 1 result (or 0 for delete, etc), NOT a list
 	.all((req, res, next) => {
-		SkillService.getSkills(req.app.get('db'), req.params.id)
+		SkillService.getById(req.app.get('db'), req.params.id)
     	.then(skill => {
         	if(!skill) {
             //logger.error(`Level with id ${priority.id} not found.`)
@@ -64,3 +85,7 @@ skillRouter
 
 	})
 module.exports = skillRouter
+
+
+
+

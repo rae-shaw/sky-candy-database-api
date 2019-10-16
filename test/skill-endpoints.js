@@ -19,7 +19,8 @@ describe('skill Endpoints', function() {
 		return helpers.cleanTables(db).catch(function(error) { 
 			console.error(error); }) })
 
-  	afterEach('cleanup', () => { console.log ('running after each'); helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
+  	afterEach('cleanup', () => { console.log ('running after each'); 
+  		return helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
 
 
 	after('disconnect from db', () => db.destroy())
@@ -66,27 +67,53 @@ describe('skill Endpoints', function() {
 		})
 
 			it('GET /api/skill responds with 200 and all of the skills', () => {
-				const expectedSkill = [{
-    				id: 1,
-    				name: 'single knee spin',
-				    alternate_names: 'tornado spin;fun spin'
-				  }]
+				const expectedSkills = [
+			        {
+			         	action: "skill",
+						age: "adult",
+						alt_names: "",
+						apparatus: "trapeze",
+						class: "climb",
+						id: 2,
+						level: "3",
+						name: "pretzel drop",
+			   			priority: "every series"
+					},
+					{
+						action: "skill",
+						age: "adult",
+						alt_names: "tornado spin,fun spin",
+						apparatus: "hammock",
+						class: "spin",
+						id: 1,
+						level: "1",
+						name: "single knee spin",
+						priority: "every series"
+					}
+				]
+
 				return supertest(app)
-					.get('/api/skill?apparatus=lyra%20boy&level=intro')
+					.get('/api/skill')
 					.expect(200)
 					.expect( res => {
-						expect(res.body).to.eql(expectedSkill)
+						expect(res.body).to.eql(expectedSkills)
 						expect(res.body[0]).to.have.property("id")
 					})
 			})
 			it('GET /api/skill/name/:name responds with 200 and all of the skills', () => {
 				const expectedSkill = [{
-    				id: 1,
-    				name: 'single knee spin',
-				    alternate_names: 'tornado spin;fun spin'
+					action: "skill",
+					age: "adult",
+					alt_names: "tornado spin,fun spin",
+					apparatus: "hammock",
+					class: "spin",
+					id: 1,
+					level: "1",
+					name: "single knee spin",
+					priority: "every series"
 				  }]
 				return supertest(app)
-					.get(`/api/skill/name/${expectedSkill[0].name}`) // NEED TO URLENCODE/DECODE
+					.get(`/api/skill/?name=single%20knee%20spin`) // NEED TO URLENCODE/DECODE
 					//.get(`/api/skill/?name=;`)
 					.expect(200)
 					.expect( res => {
@@ -126,7 +153,7 @@ describe('skill Endpoints', function() {
 				await db.insert(testPriority).into('priority').returning('id').catch(function(error) { console.error(error); })
 				await db.insert(testNames).into('name').returning('id').catch(function(error) { console.error(error); })
 				await db.insert(testSkills).into('skill').returning('*').catch(function(error) { console.error(error); })
-				await db('name').whereIn( 'id', [ 1, 2, 3] ).update({ skill_id: 1}).returning('*').catch(function(error) { console.error(error); })
+				return await db('name').whereIn( 'id', [ 1, 2, 3] ).update({ skill_id: 1}).returning('*').catch(function(error) { console.error(error); })
 			})
 
 			it('removes the skill by ID', () => {
@@ -136,10 +163,11 @@ describe('skill Endpoints', function() {
 					.delete(`/api/skill/id/${idToRemove}`)
 					console.log('id', idToRemove)
 					.expect(204)
-					.then(() =>
-						supertest(app)
+					.then(() => {
+						return supertest(app)
 							.get(`/api/skill`)
-							.expect([]))
+							.expect([])
+					})
 			})
 		})
 	})
@@ -149,6 +177,7 @@ describe('skill Endpoints', function() {
 				const skillId = 123
 				return supertest(app)
 					.patch(`/api/skill/id/${skillId}`)
+					console.log("**********", skillId)
 					.expect(404, {
 						error: { message: `Skill Not Found`}
 					})
@@ -173,7 +202,7 @@ describe('skill Endpoints', function() {
 				await db.insert(testPriority).into('priority').returning('id').catch(function(error) { console.error(error); })
 				await db.insert(testNames).into('name').returning('id').catch(function(error) { console.error(error); })
 				await db.insert(testSkills).into('skill').returning('*').catch(function(error) { console.error(error); })
-				await db('name').whereIn( 'id', [ 1, 2, 3] ).update({ skill_id: 1}).returning('*').catch(function(error) { console.error(error); })
+				return await db('name').whereIn( 'id', [ 1, 2, 3] ).update({ skill_id: 1}).returning('*').catch(function(error) { console.error(error); })
 			})
 
 			it('responds with 204 and updates the skill', () => {
@@ -189,14 +218,14 @@ describe('skill Endpoints', function() {
 					...updateSkill
 				}
 				return supertest(app)
-				.patch(`/api/skill/${idToUpdate}`)
+				.patch(`/api/skill/id/${idToUpdate}`)
 				.send(updateSkill)
 				.expect(204)
-				then( res =>
-					supertest(app)
+				then( res => {
+					return supertest(app)
 						.get(`/api/skill/${idToUpdate}`)
 						.expect(expectedSkill)
-					)
+					})
 
 			})
 		})

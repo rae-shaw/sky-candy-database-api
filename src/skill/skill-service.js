@@ -15,8 +15,7 @@ const SkillService = {
 
 	getSkills(knex, queryParams) {
 		console.log("** ** ** ", queryParams)
-		newParams = validate(queryParams, ['action', 'age', 'apparatus', 'level', 'class', 'level', 'name'])
-		
+		newParams = validate(queryParams, ['action', 'age', 'apparatus', 'level', 'class', 'level', 'name'])		
 		let query = knex
 			.select('all_skills.*')
 			.from('all_skills')
@@ -39,78 +38,56 @@ const SkillService = {
   	updateSkill(knex, id, updatedFields){
 		return knex('skill')
 			.where({ id })
+			console.log(id)
 			.update(updatedFields)
 	},
+
+	addSkill(knex, name, skillFields) {
+		return knex('skill')
+			.transaction(function(trx){
+
+				//insert the primary name into the name table
+				knex
+				.insert(skillFields.primaryname)
+				.into('name')
+				.transacting(trx)
+				.returning('id')
+				.then(function(primaryNameId){
+					skillFields.primary_name_id = primaryNameId
+
+					//insert the skillfields into the skill table, including the primary_name_id
+					knex
+					.insert(skillFields.primaryNameId)
+					.into('skill')
+					.returning('id')
+					.transacting(trx);
+					})
+					.then(function(skill_id) {
+					//insert skill_id into alternate names
+						skill_id = skill.id
+						alt_names.forEach(
+							knex
+							.insert(alt_names[i], skill_id))
+							.transacting(trx);
+							})
+						.then(function(skillFields) {
+							knex
+							.from('level')
+							.select('id')
+							.where(level = skillFields.level)
+							.insert('id')
+							.into('skill')
+							.transacting(trx);
+							})
+						//is the above correct for inserting the rest of the fields? or does it need something else?
+							.then(trx.commit)
+							.catch(trx.rollback);
+				})
+	},
 }
-	//also in update skill, update the name table as well, much like the post request
-	// addSkill(knex, name, skillFields) {
-	// 	return knex('skill')
-	// 		.transaction(function(trx){
 
-				// let primaryNameId = await knex
-				// .insert(skillFields.primaryname)
-				// .into('name')
-				// .transacting(trx)
-				// .returning('id')
-				// .then()
-
-				// let 
-
-	// 			knex
-	// 			.insert(skillFields.primaryname)
-	// 			.into('name')
-	// 			.transacting(trx)
-	// 			.returning('id')
-	// 			.then(function(primaryNameId){
-	// 				skillFields.primary_name_id = primaryNameId
-	// 				knex
-	// 				.insert(skillFields)
-	// 				.into('skill')
-	// 				.returning('id'))
-	// 				.transacting(trx)
-	// 				.then(function(skill_id) {
-	// 					altNames.forEach()
-	// 					for each name that isn't primaryname
-	// 					await knex.insert(name[i]). ... .transacting(trx).then()
-
-	// 					// Update the primary name row that doesn't have skill_id yet
-	// 					// You know primaryNameId to find the row
-	// 					// You know skill_id to update the row.
-	// 					//await that too
-	// 				})
-	// 			})
-	// 			if(primaryname)
-	// 				thing I want it to do
-	// 			otherwise just
-	// 		//if the skill is the primary name, use the id to insert into the 'skill.primary_id'
-	// 			//then, insert the skill id into the name table
-	// 		//otherwise, update the skill table and then insert the skill id into the name table
-	// 		})
-	// }
-// // knex.transaction(function(trx) {
-
-// //   knex.insert({name: 'Old Books'}, 'id')
-// //     .into('catalogues')
-// //     .transacting(trx)
-// //     .then(function(ids) {
-// //       books.forEach((book) => book.catalogue_id = ids[0]);
-// //       return knex('books').insert(books).transacting(trx);
-// //     })
-// //     .then(trx.commit)
-// //     .catch(trx.rollback);
-// // })
-// // .then(function(inserts) {
-// //   console.log(inserts.length + ' new books saved.');
-// // })
-// // .catch(function(error) {
-// //   // If we get here, that means that neither the 'Old Books' catalogues insert,
-// //   // nor any of the books inserts will have taken place.
-// //   console.error(error);
-// // });
-// // 	},
-// }
-
-// module.exports = SkillService
+						
+module.exports = SkillService
 
 	
 

@@ -16,9 +16,11 @@ describe('apparatus Endpoints', function() {
 	})
 
 
-	before('cleanup', () => { helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
+	before('cleanup', () => { 
+		return helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
 
-  	afterEach('cleanup', () => { helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
+  	afterEach('cleanup', () => { 
+  		return helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
 
 	after('disconnect from db', () => db.destroy())
 
@@ -87,7 +89,7 @@ describe('apparatus Endpoints', function() {
 				})
 				.then(res => {
 					console.log("Getting here", res.body)
-					supertest(app)
+					return supertest(app)
 					.get(`/api/apparatus/${res.body.id}`)
 				 	.expect(200)
 					.expect(res.body)

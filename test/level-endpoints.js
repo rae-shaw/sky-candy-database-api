@@ -18,7 +18,8 @@ describe('level Endpoints', function() {
 	before('cleanup', () => { 
 		return helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
 
-  	afterEach('cleanup', () => { helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
+  	afterEach('cleanup', () => { 
+  		return helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
 
 	after('disconnect from db', () => db.destroy())
 
@@ -78,7 +79,7 @@ describe('level Endpoints', function() {
 					expect(res.body).to.have.property('id')
 				})
 				.then(res => {
-					supertest(app)
+					return supertest(app)
 					.get(`/api/level/${res.body.id}`)
 					.expect(res.body)
 				})	
@@ -99,7 +100,7 @@ describe('level Endpoints', function() {
 
 
 			beforeEach('insert levels', async function() { 
-				await db.insert(testLevels).into('level').returning('id').catch(function(error) { console.error(error); })
+				return await db.insert(testLevels).into('level').returning('id').catch(function(error) { console.error(error); })
 			})
 
 			it('GET /api/level/:id responds with 200 and the specified level', () => {
@@ -140,10 +141,11 @@ describe('level Endpoints', function() {
 					.delete(`/api/level/${idToRemove}`)
 					console.log('id', idToRemove)
 					.expect(204)
-					.then(() =>
-						supertest(app)
+					.then(() => {
+						return supertest(app)
 							.get(`/api/level`)
-							.expect(expectedLevel))
+							.expect(expectedLevel)
+					})
 			})
 		})
 	})

@@ -80,7 +80,7 @@ describe('priority Endpoints', function() {
 					expect(res.body).to.have.property('id')
 				})
 				.then(res => {
-					supertest(app)
+					return supertest(app)
 					.get(`/api/priority/${res.body.id}`)
 					.expect(res.body)
 				})

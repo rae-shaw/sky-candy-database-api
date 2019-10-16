@@ -15,9 +15,11 @@ describe('class Endpoints', function() {
 		db.debug()
 	})
 
-	before('cleanup', () => { helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
+	before('cleanup', () => { 
+		return helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
 
-  	afterEach('cleanup', () => { helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
+  	afterEach('cleanup', () => { 
+  		return helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
 
 	after('disconnect from db', () => db.destroy())
 
@@ -32,8 +34,8 @@ describe('class Endpoints', function() {
 		context('Given there are classes in the database', () => {
 			const testClasses = helpers.makeClassArray()
 
-			beforeEach('insert classes', () => {
-				db.insert(testClasses).into('class').returning('id').catch(function(error) { console.error(error); })
+			beforeEach('insert classes', async function() {
+				return await db.insert(testClasses).into('class').returning('id').catch(function(error) { console.error(error); })
 			})
 
 
@@ -72,14 +74,16 @@ describe('class Endpoints', function() {
 			return supertest(app)
 				.post(`/api/class`)
 				.send(newClass)
+				console.log('new class', newClass)
 				.expect(201)
 				.expect( res => {
 					expect(res.body.class).to.eql(newClass.class)
 					expect(res.body).to.have.property('id')
 				})
 				.then(res => {
-					supertest(app)
+					return supertest(app)
 					.get(`/api/class/${res.body.id}`)
+					console.log('res body id', res.body.id)
 					.expect(res.body)
 				})
 				
@@ -109,7 +113,7 @@ describe('class Endpoints', function() {
 				console.log('expectedClass', expectedClass)
 				return supertest(app)
 					.get(`/api/class/${classId}`)
-					.expect(201)
+					.expect(200)
 					.expect( res => {
 						expect(res.body.class).to.eql(expectedClass.class)
 						expect(res.body).to.have.property('id')
@@ -164,7 +168,7 @@ describe('class Endpoints', function() {
 			const testClass = helpers.makeClassArray()
 
 			beforeEach('insert class', async function() {
-				await db.insert(testClass).into('class').returning('id')
+				return await db.insert(testClass).into('class').returning('id')
 
 			})
 
@@ -181,11 +185,11 @@ describe('class Endpoints', function() {
 				.patch(`/api/class/${idToUpdate}`)
 				.send(updateClass)
 				.expect(204)
-				then( res =>
-					supertest(app)
+				then( res => {
+					return supertest(app)
 						.get(`/api/class/${idToUpdate}`)
 						.expect(expectedClass)
-					)
+					})
 			})
 		})
 

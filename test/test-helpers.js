@@ -164,6 +164,9 @@ const jwt = require('jsonwebtoken')
             {
                 level: '2'
             },
+            {
+                level: '3'
+            },
         ];
     }
 
@@ -193,13 +196,16 @@ const jwt = require('jsonwebtoken')
             {
                 name: 'fun spin'
             },
+            {
+                name: 'pretzel drop'
+            },
         ];
     }
     function makeSkillArray(){
         return [
         {
             primary_name_id: 1,
-            apparatus_id: 2,
+            apparatus_id: 3,
             level_id: 2,
             age_id: 1,
             priority_id: 2,
@@ -209,7 +215,20 @@ const jwt = require('jsonwebtoken')
             prerequisites: 'intro series',
             warm_up: 'example warm-up here',
             video: 'https://examplevideolink.com'
-        }
+        },
+        {
+            primary_name_id: 4,
+            apparatus_id: 2,
+            level_id: 4,
+            age_id: 1,
+            priority_id: 2,
+            class_id: 3,
+            action_id: 3,
+            details: 'example details 2',
+            prerequisites: 'trapeze 2',
+            warm_up: 'example warm-up 2 here',
+            video: 'https://examplevideolink2.com'
+        },
         ];
     }
 

@@ -15,9 +15,11 @@ describe('action Endpoints', function() {
 		db.debug()
 	})
 
- 	before('cleanup', () => { helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
+ 	before('cleanup', () => { 
+ 		return helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
 
-  	afterEach('cleanup', () => { helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
+  	afterEach('cleanup', () => { 
+  		return helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
 
 	after('disconnect from db', () => db.destroy())
 
@@ -55,17 +57,17 @@ describe('action Endpoints', function() {
 		beforeEach('insert action', async function() {
 				return await db.insert(testAction).into('action').returning('id')
 		})
-		// it(`responds with 400 missing 'action' if not supplied`, () => {
-		// 	const newActionMissingAction = {
+		it(`responds with 400 missing 'action' if not supplied`, () => {
+			const newActionMissingAction = {
 
-		// 	}
-		// 	return supertest(app)
-		// 		.post(`/api/action`)
-		// 		.send(newActionMissingAction)
-		// 		.expect(400, {
-		// 			error: { message: `Missing action in request body`}
-		// 		})
-		// })
+			}
+			return supertest(app)
+				.post(`/api/action`)
+				.send(newActionMissingAction)
+				.expect(400, {
+					error: { message: `Missing action in request body`}
+				})
+		})
 		it('creates an action, responding with a 201 and the new action', () => {
 			const newAction ={
 				action: 'new action'
@@ -79,7 +81,7 @@ describe('action Endpoints', function() {
 					expect(res.body).to.have.property('id')
 				})
 				.then(res => {
-					supertest(app)
+					return supertest(app)
 					console.log('response body', res.body.id)
 					.get(`/api/action/${res.body.id}`)
 					.expect(res.body)
@@ -103,7 +105,7 @@ describe('action Endpoints', function() {
 			const testAction = helpers.makeActionArray()
 
 			beforeEach('insert action', async function() { 
-				await db.insert(testAction).into('action').returning('id').catch(function(error) { console.error(error); })
+				return await db.insert(testAction).into('action').returning('id').catch(function(error) { console.error(error); })
 			})
 
 			it('GET /api/action/:id responds with 200 and the specified action', () => {
@@ -144,10 +146,12 @@ describe('action Endpoints', function() {
 					.delete(`/api/action/${idToRemove}`)
 					console.log('id', idToRemove)
 					.expect(204)
-					.then(() =>
+					.then(() => {
 						supertest(app)
 							.get(`/api/action`)
-							.expect(expectedAction))
+							.expect(expectedAction)
+				
+					})
 			})
 		})
 	})
@@ -166,7 +170,7 @@ describe('action Endpoints', function() {
 			const testAction = helpers.makeActionArray()
 
 			beforeEach('insert action', async function() {
-				await db.insert(testAction).into('action').returning('id')
+				return await db.insert(testAction).into('action').returning('id')
 
 			})
 
@@ -183,10 +187,10 @@ describe('action Endpoints', function() {
 				.patch(`/api/action/${idToUpdate}`)
 				.send(updateAction)
 				.expect(204)
-				then( res =>
+				then( res => 
 					supertest(app)
 						.get(`/api/action/${idToUpdate}`)
-						.expect(expectedAction)
+						.expect(updateAction)
 					)
 			})
 		})
