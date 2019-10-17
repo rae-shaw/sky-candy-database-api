@@ -17,7 +17,7 @@ skillRouter
 		.catch(next)
 	})
 	.post(jsonParser, (req, res, next) => {
-		const { name, action, age, apparatus, class, level, priority, details, prerequisites, warm_up, video } = req.body
+		const { primaryname, alt_names, action, age, apparatus, cs, level, priority, details, prerequisites, warm_up, video } = req.body
 
 			for(const [key,value] of Object.entries(req.body)) {
 			if (value == null) {
@@ -26,11 +26,11 @@ skillRouter
 				})
 			}
 		}
-		SKillService.insertSkill(
+		SkillService.addSkill(
 			req.app.get('db'),
 			req.body
 		)
-			.then(age => {
+			.then(skill => {
 				res
 					.status(201)
 					.json(skill)

@@ -3,7 +3,7 @@ const knex = require('knex')
 const app = require('../src/app')
 const helpers = require('./test-helpers')
 
-describe.only('name Endpoints', function() {
+describe('name Endpoints', function() {
 	let db 
 
 	before('make knex instance', () => {
@@ -54,10 +54,9 @@ describe.only('name Endpoints', function() {
 			}
 			return supertest(app)
 				.post(`/api/alternatename`)
-				console.log('making it to post')
 				.send(newNameMissingName)
 				.expect(400, {
-					error: { message: `Missing name in request body`}
+					error: { message: `Request body must contain 'name'`}
 				})
 		})
 		
@@ -68,7 +67,6 @@ describe.only('name Endpoints', function() {
 			}
 			return supertest(app)
 				.post(`/api/alternatename`)
-				console.log('making it to post 2')
 				.send(newName)
 				.expect(201)
 				.expect( res => {

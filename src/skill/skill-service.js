@@ -42,46 +42,48 @@ const SkillService = {
 			.update(updatedFields)
 	},
 
-	addSkill(knex, name, skillFields) {
+	addSkill(knex, skillFields) {
+		console.log('skillFields', skillFields)
 		return knex('skill')
-			.transaction(function(trx){
-
+		//validate data(ids) from client, use promise, if exist, oK, if not-throw an error
+			.transaction(function(trx) {
 				//insert the primary name into the name table
-				knex
+				return trx
 				.insert(skillFields.primaryname)
 				.into('name')
-				.transacting(trx)
+				//.transacting(trx)
 				.returning('id')
 				.then(function(primaryNameId){
 					skillFields.primary_name_id = primaryNameId
 
 					//insert the skillfields into the skill table, including the primary_name_id
-					knex
+					return trx
 					.insert(skillFields.primaryNameId)
 					.into('skill')
 					.returning('id')
-					.transacting(trx);
+					//.transacting(trx);
 					})
 					.then(function(skill_id) {
 					//insert skill_id into alternate names
-						skill_id = skill.id
-						alt_names.forEach(
-							knex
-							.insert(alt_names[i], skill_id))
-							.transacting(trx);
+						//skill_id = skill.id
+						skillFields.alt_names.forEach(
+							trx
+							.insert(skillFields.alt_names[i], skill_id)
+							.into('name'))
+							//.transacting(trx);
 							})
-						.then(function(skillFields) {
-							knex
-							.from('level')
-							.select('id')
-							.where(level = skillFields.level)
-							.insert('id')
-							.into('skill')
-							.transacting(trx);
+						return skill_id
+						.then(function(skill_id) {
+							delete skillFields.alt_names
+							delete skillFields.primary_name_id
+							return trx('skill')
+							.where('id', skill_id)
+							.update( skillFields )
+							//.transacting(trx);
 							})
 						//is the above correct for inserting the rest of the fields? or does it need something else?
-							.then(trx.commit)
-							.catch(trx.rollback);
+							// .then(trx.commit)
+							// .catch(trx.rollback);
 				})
 	},
 }

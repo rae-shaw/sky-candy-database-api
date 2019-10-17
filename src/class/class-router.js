@@ -24,7 +24,8 @@ classRouter
     .post(jsonParser, (req, res, next) => {
         const cs = req.body
     
-            if (cs.cs == undefined) {
+        const numberOfValues = Object.values(req.body).filter(Boolean).length
+            if (numberOfValues === 0) {
                 return res.status(400).json({
                     error: { message: `Missing class in request body`}
                 })

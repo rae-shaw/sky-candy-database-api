@@ -13,7 +13,7 @@ const serializeName = name => ({
 
 nameRouter
 	.route('/')
-	.patch(jsonParser, (req, res, next) =>{
+	.post(jsonParser, (req, res, next) =>{
 		const { name, skill_id } = req.body
 
 		const numberOfValues = Object.values(req.body).filter(Boolean).length
@@ -24,12 +24,13 @@ nameRouter
 			}
 		NameService.addAlternateName(
 			req.app.get('db'),
-			req.params.id,
 			req.body
 			)
-				.then(numRowsAffected => {
-					res.status(204).end()
-				})
+				.then(level => {
+                res
+                    .status(201)
+                    .json(level)
+            	})
 				.catch(next)
 	})
 

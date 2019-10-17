@@ -33,17 +33,17 @@ app.use(
     })
 );
 
-app.use('/api/auth', authRouter)
-app.use('/api/apparatus', apparatusRouter)
-app.use('/api/age', ageRouter)
+// app.use('/api/auth', authRouter)
+// app.use('/api/apparatus', apparatusRouter)
+// app.use('/api/age', ageRouter)
 app.use('/api/action', actionRouter)
 app.use('/api/class', classRouter)
-app.use('/api/level', levelRouter)
-app.use('/api/priority', priorityRouter)
-app.use('api/alternatename', nameRouter)
+// app.use('/api/level', levelRouter)
+// app.use('/api/priority', priorityRouter)
+app.use('/api/alternatename', nameRouter)
 app.use('/api/skill', skillRouter)
-app.use('api/skill/id/:id', skillRouter)
-app.use('api/name/:name', skillRouter)
+// app.use('api/skill/id/:id', skillRouter)
+// app.use('api/name/:name', skillRouter)
 
 
 

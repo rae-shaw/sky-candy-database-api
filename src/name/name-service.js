@@ -22,6 +22,15 @@ const NameService = {
         return rows[0]
       })
   },
+  // updatePrimaryName(knex, updatedName){
+  //   return knex
+  //     .from('name')
+  //     .select('id')
+  //     .where(updateName = name)
+  //     .then(
+  //       .where(skill_id = skill.id)
+  //       .update(updatedName))
+  // }
   //update service goes through skill table
 
 }
