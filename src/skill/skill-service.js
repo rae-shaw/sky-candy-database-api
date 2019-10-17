@@ -59,12 +59,14 @@ const SkillService = {
 					.returning( 'id' )
 					})
 					.then(function(skill_id) {
-						console.log('skill_id', skill_id)
-						return trx
-							const namesToInsert = skillFields.alt_names.map(name => 
-  								({ alt_names: alt_names, skill_id: skill_id[0] })); 
-								console.log('names to insert', namesToInsert)
-							trx.insert(namesToInsert)
+						console.log('skill fields', skillFields.alt_names)
+						//return trx
+							const namesToInsert = Object.keys(skillFields.alt_names).map(name => 
+  								({ name: skillFields.alt_names, skill_id: skill_id[0] })); 
+								console.log('skill_id', skill_id[0])
+								console.log('namesToInsert', namesToInsert)
+							trx.insert({ namesToInsert })
+								.into('name')
 							})
 						return skill_id
 						.then(function(skill_id) {
