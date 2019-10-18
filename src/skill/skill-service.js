@@ -28,6 +28,7 @@ const SkillService = {
      		.where({ id })
      		.delete()
   	},
+
   	getById(knex, id){
    		return knex
      		.from('skill')
@@ -85,6 +86,13 @@ const SkillService = {
 				})
 			})
 	},
+	
+	updatePrimaryNameFromExisting(knex, id, skill_id){
+        return knex('skill')
+        	.where({ id })
+        	.update({ primary_name_id: skill_id })
+
+    }
 }
 
 						

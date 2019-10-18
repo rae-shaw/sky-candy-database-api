@@ -13,25 +13,38 @@ const NameService = {
      .where({ id })
      .first()
   },
+
   addAlternateName(knex, newName, skill_id){
     return knex
-      .insert(newName, skill_id)
-      .into('name')
-      .returning('*')
-      .then( rows => {
-        return rows[0]
-      })
+        .insert(newName, skill_id)
+        .into('name')
+        .returning('*')
+        .then( rows => {
+            return rows[0]
+        })
   },
-  // updatePrimaryName(knex, updatedName){
-  //   return knex
-  //     .from('name')
-  //     .select('id')
-  //     .where(updateName = name)
-  //     .then(
-  //       .where(skill_id = skill.id)
-  //       .update(updatedName))
-  // }
-  //update service goes through skill table
+
+  addPrimaryName(knex, newName, skill_id) {
+    return knex
+        .transaction(function(trx) {
+                    //insert the primary name into the name table
+            return trx ('name')
+            .insert({ name: newName, skill_id: skill_id })
+            .returning('id')
+            .then(function(primaryNameId){
+                return trx('skill')
+                .update({ primary_name_id: primaryNameId[0] })
+                .returning( 'id' )
+            })
+        })
+    },
+
+    updateName(knex, id, updatedFields) {
+        return knex('name')
+            .where({ id })
+            .update(updatedFields)
+    },
+}
 
 }
 
