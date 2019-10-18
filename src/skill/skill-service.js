@@ -53,39 +53,36 @@ const SkillService = {
 				.insert({name: skillFields.primaryname})
 				.returning('id')
 				.then(function(primaryNameId){
-					//insert the skillfields into the skill table, including the primary_name_id
+					//insert insert the name.id from the primaryname insert into the primary_name_id row of the skill table
 					return trx
 						.insert({ primary_name_id: primaryNameId[0] })
 						.into('skill')
 						.returning( 'id' )
 				})
-						.then(function(skill_id) {
-							skillid = skill_id
-							return trx('name')
-								.where({ name: skillFields.primaryname })
-								.update({ skill_id: skillid[0] })
-						})
-								.then( () => {
-									const namesToInsert = skillFields.alt_names.map(name => {
-										return {name: name, skill_id: skillid[0]}
-									})
-									return trx
-										.insert( namesToInsert )
-										.into('name')
-								})
-									//return skillid
-									
-										.then( () => {
-											console.log('*********************skillid', skillid)
-											console.log('skillFields', skillFields)
-											delete skillFields.alt_names
-											delete skillFields.primaryname
-											return trx('skill')
-											.where({ id: skillid[0] })
-											.update( skillFields )
-										})
-										// .then(trx.commit)
-										// .catch(trx.rollback);
+				.then(function(skill_id) {
+					//insert the skill_id field into the name table
+					skillid = skill_id
+					return trx('name')
+						.where({ name: skillFields.primaryname })
+						.update({ skill_id: skillid[0] })
+				})
+				.then( () => {
+					//insert all the alt_names with the skill_id  into the name table
+					const namesToInsert = skillFields.alt_names.map(name => {
+						return {name: name, skill_id: skillid[0]}
+					})
+					return trx
+						.insert( namesToInsert )
+						.into('name')
+				})									
+				.then( () => {
+					//delete alt_names and primaryname from skillFields and insert the rest of the fields into the skill table
+					delete skillFields.alt_names
+					delete skillFields.primaryname
+					return trx('skill')
+					.where({ id: skillid[0] })
+					.update( skillFields )
+				})
 			})
 	},
 }
