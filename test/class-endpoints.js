@@ -23,7 +23,7 @@ describe('class Endpoints', function() {
 
 	after('disconnect from db', () => db.destroy())
 
-	describe.only('GET /api/class/', () => {
+	describe('GET /api/class/', () => {
 		context('Given no classes', () => {
 			it('responds with 200 and an empty list', () => {
 				return supertest(app)

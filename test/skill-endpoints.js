@@ -17,10 +17,12 @@ describe('skill Endpoints', function() {
 
 	before('cleanup', () => { 
 		return helpers.cleanTables(db).catch(function(error) { 
-			console.error(error); }) })
+			console.error(error); }) 
+	})
 
   	afterEach('cleanup', () => { console.log ('running after each'); 
-  		return helpers.cleanTables(db).catch(function(error) { console.error(error); }) })
+  		return helpers.cleanTables(db).catch(function(error) { console.error(error); }) 
+  	})
 
 
 	after('disconnect from db', () => db.destroy())
@@ -44,86 +46,160 @@ describe('skill Endpoints', function() {
 			const testNames = helpers.makeNameArray()
 
 		
-		beforeEach('insert data in skills and names', async function(){
-			// testData (db, data, table) {
-			// 	return await db.insert(data).into(table).returning('id').catch(function(error) { console.error(error); })
-			// }
+			beforeEach('insert data in skills and names', async function(){
+				// testData (db, data, table) {
+				// 	return await db.insert(data).into(table).returning('id').catch(function(error) { console.error(error); })
+				// }
 
-			// testData(db, testApparatus, 'apparatus')
-			// testData(db, testAction,    'action')
-			// testData(db, testAge,       'age')
-			await db.insert(testApparatus) .into('apparatus') .catch(function(error) { console.error(error); })
-			await db.insert(testAction)    .into('action')    .catch(function(error) { console.error(error); })
-			await db.insert(testAge)       .into('age')       .catch(function(error) { console.error(error); })
-			await db.insert(testLevel)     .into('level')     .catch(function(error) { console.error(error); })
-			await db.insert(testClass)     .into('class')     .catch(function(error) { console.error(error); })
-			await db.insert(testPriority)  .into('priority')  .catch(function(error) { console.error(error); })
-			await db.insert(testNames)     .into('name')      .catch(function(error) { console.error(error); })
+				// testData(db, testApparatus, 'apparatus')
+				// testData(db, testAction,    'action')
+				// testData(db, testAge,       'age')
+				await db.insert(testApparatus) .into('apparatus') .catch(function(error) { console.error(error); })
+				await db.insert(testAction)    .into('action')    .catch(function(error) { console.error(error); })
+				await db.insert(testAge)       .into('age')       .catch(function(error) { console.error(error); })
+				await db.insert(testLevel)     .into('level')     .catch(function(error) { console.error(error); })
+				await db.insert(testClass)     .into('class')     .catch(function(error) { console.error(error); })
+				await db.insert(testPriority)  .into('priority')  .catch(function(error) { console.error(error); })
+				await db.insert(testNames)     .into('name')      .catch(function(error) { console.error(error); })
 
-			await db.insert(testSkills)    .into('skill')    .returning('*')  .catch(function(error) { console.error(error); })
-			return await db('name').whereIn( 'id', [ 1, 2, 3] ).update({ skill_id: 1}).returning('*').catch(function(error) { console.error(error); })
-			 // let allSkills = await db.select('*').from('all_skills')
-			// console.log("*****allSkills*****", allSkills)
-		})
+				await db.insert(testSkills)    .into('skill')    .returning('*')  .catch(function(error) { console.error(error); })
+				return await db('name').whereIn( 'id', [ 1, 2, 3] ).update({ skill_id: 1}).returning('*').catch(function(error) { console.error(error); })
+				 // let allSkills = await db.select('*').from('all_skills')
+				// console.log("*****allSkills*****", allSkills)
+			})
 
 			it('GET /api/skill responds with 200 and all of the skills', () => {
-				const expectedSkills = [
-			        {
-			         	action: "skill",
-						age: "adult",
-						alt_names: "",
-						apparatus: "trapeze",
-						class: "climb",
-						id: 2,
-						level: "3",
-						name: "pretzel drop",
-			   			priority: "every series"
-					},
+				const expectedSkill = [
 					{
-						action: "skill",
-						age: "adult",
-						alt_names: "tornado spin,fun spin",
-						apparatus: "hammock",
-						class: "spin",
-						id: 1,
-						level: "1",
-						name: "single knee spin",
-						priority: "every series"
+			            name: 'single knee spin',
+			            apparatus: 'lyra',
+			            level: '1',
+			            age: 'adult',
+			            priority: 'every series',
+			            class: 'spin',
+			            action: 'skill',
+			            details: 'example details',
+			            prerequisites: 'intro series',
+			            warm_up: 'example warm-up here',
+			            video: 'https://examplevideolink.com'
 					}
 				]
-
 				return supertest(app)
-					.get('/api/skill')
+					.get('/api/skill?name=singlekneespin&age=adult')
 					.expect(200)
 					.expect( res => {
-						expect(res.body).to.eql(expectedSkills)
+						//console.log('****** res', res)
+						expect(res.body[0]).to.eql(expectedSkill[0])
 						expect(res.body[0]).to.have.property("id")
 					})
 			})
-			it('GET /api/skill/name/:name responds with 200 and all of the skills', () => {
-				const expectedSkill = [{
-					action: "skill",
-					age: "adult",
-					alt_names: "tornado spin,fun spin",
-					apparatus: "hammock",
-					class: "spin",
-					id: 1,
-					level: "1",
-					name: "single knee spin",
-					priority: "every series"
-				  }]
-				return supertest(app)
-					.get(`/api/skill/?name=single%20knee%20spin`) // NEED TO URLENCODE/DECODE
-					//.get(`/api/skill/?name=;`)
-					.expect(200)
-					.expect( res => {
-						expect(res.body).to.eql(expectedSkill)
-						expect(res.body[0]).to.have.property("id")
-					})
-			})
-				
 		})
 	})
+
+	// describe(`POST /api/skill`, () => {
+	// 	context('Given there are skills in the database', () => {
+	// 		const testApparatus = helpers.makeApparatusArray()
+	// 		const testAge = helpers.makeAgeArray()
+	// 		const testAction = helpers.makeActionArray()
+	// 		const testLevel = helpers.makeLevelArray()
+	// 		const testClass = helpers.makeClassArray()
+	// 		const testPriority = helpers.makePriorityArray()
+	// 		const testSkills = helpers.makeSkillArray()
+	// 		const testNames = helpers.makeNameArray()
+
+	// 		beforeEach('insert data in skills and names', async function(){
+	// 			await db.insert(testApparatus).into('apparatus').returning('id').catch(function(error) { console.error(error); })
+	// 			// await db.insert(testAction).into('action').returning('id').catch(function(error) { console.error(error); })
+	// 			// await db.insert(testAge).into('age').returning('id').catch(function(error) { console.error(error); })
+	// 			await db.insert(testLevel).into('level').returning('id').catch(function(error) { console.error(error); })
+	// 			// await db.insert(testClass).into('class').returning('id').catch(function(error) { console.error(error); })
+	// 			//await db.insert(testPriority).into('priority').returning('id').catch(function(error) { console.error(error); })
+	// 			await db.insert(testNames).into('name').returning('id').catch(function(error) { console.error(error); })
+	// 			await db.insert(testSkills).into('skill').returning('*').catch(function(error) { console.error(error); })
+	// 			return await db('name').whereIn( 'id', [ 1, 2, 3] ).update({ skill_id: 1}).returning('*').catch(function(error) { console.error(error); })
+	// 		})
+	// 		it(`responds with 400 missing 'priority' if not supplied`, () => {
+	// 			const newSkillMissingFields = {
+
+	// 			}
+	// 			return supertest(app)
+	// 				.post(`/api/skill`)
+	// 				.send(newSkillMissingFields)
+	// 				.expect(400, {
+	// 					error: { message: `Need at least one field to add in request body`}
+	// 				})
+	// 		})
+	// 		it('creates an skill, responding with a 201 and the new skill', () => {
+	// 			const newSkill ={
+	// 				primaryname: 'new name',
+	// 				alt_names: ['new name 2', 'new name 3'],
+	// 				//apparatus_id: 1
+	// 				prerequisites: 'awesome warm-ups'
+	// 			}
+	// 			return supertest(app)
+	// 				.post(`/api/skill`)
+	// 				.send(newSkill)
+	// 				.expect(201)
+	// 				.expect( res => {
+	// 					expect(res.body[0]).to.have.property('primary_name_id')
+	// 					expect(res.body[0]).to.have.property('id')
+	// 				})
+	// 				.then(res => {
+	// 					return supertest(app)
+	// 					.get(`/api/skill/id/${res.body.id}`)
+	// 					.expect(res.body)
+	// 				})
+	// 		})
+	// 	})
+	// })
+
+	describe('GET /api/skill/id/:id', () => {
+		context(`Given no skills`, () => {
+			it(`responds 404 when the skill doesn't exist`, () => {
+				return supertest(app)
+					.get(`/api/skill//id/123`)
+					.expect(404, {
+						error: { message: `Skill Not Found` }
+					})
+			})
+		})
+		context('Given there are skills in the database', () => {
+			const testApparatus = helpers.makeApparatusArray()
+			const testAge = helpers.makeAgeArray()
+			const testAction = helpers.makeActionArray()
+			const testLevel = helpers.makeLevelArray()
+			const testClass = helpers.makeClassArray()
+			const testPriority = helpers.makePriorityArray()
+			const testSkills = helpers.makeSkillArray()
+			const testNames = helpers.makeNameArray()
+
+			beforeEach('insert data in skills and names', async function(){
+				await db.insert(testApparatus).into('apparatus').returning('id').catch(function(error) { console.error(error); })
+				await db.insert(testAction).into('action').returning('id').catch(function(error) { console.error(error); })
+				await db.insert(testAge).into('age').returning('id').catch(function(error) { console.error(error); })
+				await db.insert(testLevel).into('level').returning('id').catch(function(error) { console.error(error); })
+				await db.insert(testClass).into('class').returning('id').catch(function(error) { console.error(error); })
+				await db.insert(testPriority).into('priority').returning('id').catch(function(error) { console.error(error); })
+				await db.insert(testNames).into('name').returning('id').catch(function(error) { console.error(error); })
+				await db.insert(testSkills).into('skill').returning('*').catch(function(error) { console.error(error); })
+				return await db('name').whereIn( 'id', [ 1, 2, 3] ).update({ skill_id: 1}).returning('*').catch(function(error) { console.error(error); })
+			})
+
+			it('GET /api/skill/id/:id responds with 200 and the specified priority', () => {
+				const skillId = 2
+				const expectedSkill = testSkills[skillId-1]
+				console.log('expectedSkill', expectedSkill)
+				return supertest(app)
+					.get(`/api/skill/id/${skillId}`)
+					.expect(200)
+					.expect( res => {
+						expect(res.body.id).to.eql(skillId)
+						expect(res.body).to.have.property('id')
+					})
+			})
+		})
+	})
+
 	describe('DELETE /api/skill/id/:id', () => {
 		context(`Given no skills`, () => {
 			it(`responds 404 when the level doesn't exist`, () => {
@@ -157,7 +233,7 @@ describe('skill Endpoints', function() {
 			})
 
 			it('removes the skill by ID', () => {
-				const idToRemove = 1
+				const idToRemove = 3
 				const expectedSkill = testSkills.filter(skill => skill.id !== idToRemove)
 					return supertest(app)
 					.delete(`/api/skill/id/${idToRemove}`)
@@ -171,6 +247,7 @@ describe('skill Endpoints', function() {
 			})
 		})
 	})
+
 	describe(`PATCH /api/skill/id/:id`, () => {
 		context(`Given no skill`, () =>{
 			it(`responds with 404`, () => {
@@ -230,19 +307,8 @@ describe('skill Endpoints', function() {
 			})
 		})
 
-	})
-	
+	})	
 
 })
-//POST 
-//transaction
-// 1. start
-// 2. name w/o skill id
-// 3. post skill
-// 4. update name table with skill_id
-// 5. commit/rollback trx
-
-//adding queries to the view query?
 
 
-//patch-> how will this come through from the client-side?

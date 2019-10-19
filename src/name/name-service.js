@@ -24,17 +24,28 @@ const NameService = {
         })
   },
 
-  addPrimaryName(knex, newName, skill_id) {
+  addPrimaryName(knex, newName) {
     return knex
         .transaction(function(trx) {
                     //insert the primary name into the name table
-            return trx ('name')
-            .insert({ name: newName, skill_id: skill_id })
+            return trx
+            .insert(newName)
+            .into('name')
             .returning('id')
+            //console.log('********', name.id)
             .then(function(primaryNameId){
+                console.log('*********', primaryNameId)
                 return trx('skill')
+                .where({ id: newName.skill_id})
                 .update({ primary_name_id: primaryNameId[0] })
-                .returning( 'id' )
+                .returning('primary_name_id')
+            })
+            .then( function(primaryNameId) {
+              return trx
+              .select('*')
+              .from('name')
+              .where({ id: primaryNameId[0] })
+              .first()
             })
         })
     },
@@ -46,7 +57,6 @@ const NameService = {
     },
 }
 
-}
 
 
 module.exports = NameService

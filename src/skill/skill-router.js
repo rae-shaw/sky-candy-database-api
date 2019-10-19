@@ -13,9 +13,12 @@ skillRouter
 		SkillService.getSkills(knexInstance, req.query)
 			.then(skills => {
 				res.json(skills)
+				//console.log('*********res.body', res.body)
 			})
+
 		.catch(next)
 	})
+
 	.post(jsonParser, (req, res, next) => {
 		const { primaryname, alt_names, action, age, apparatus, cs, level, priority, details, prerequisites, warm_up, video } = req.body
 
@@ -30,6 +33,7 @@ skillRouter
 			req.app.get('db'),
 			req.body
 		)
+
 			.then(skill => {
 				res
 					.status(201)
@@ -55,13 +59,29 @@ skillRouter
     })
         .catch( error => console.log('caught error ' , error))
     })
+    
+	.get((req, res, next) => {
+    	res.json(res.skill)
+    })
+
+    .delete((req, res, next) => {
+        SkillService.deleteSkill(
+            req.app.get('db'),
+            req.params.id
+        )
+            .then(numRowsAffected => {
+                res.status(204).end()
+            })
+            .catch(next)
+    })
+
     .patch(jsonParser, (req, res, next) =>{
 		const { skill } = req.body
 
 		const numberOfValues = Object.values(req.body).filter(Boolean).length
 			if (numberOfValues === 0) {
 				return res.status(400).json({
-					error: { message: `Request body must contain 'action'`}
+					error: { message: `Request body must contain at least one field to update`}
 				})
 			}
 		SkillService.updateSkill(
@@ -75,15 +95,51 @@ skillRouter
 				.catch(next)
 	})
 skillRouter
-	.route('/name/:name') // This route should go in to '/' with query params (?name=foo;etc=bar)
-	.get((req, res, next) => {
-			SkillService.getSkills(req.app.get('db'), req.params.name)
-				.then(skills => {
-					res.json(skills)
-				})
-			.catch(next)
+	.route('name/:id')
+	.patch(jsonParser, (req, res, next) => {
+		SkillService.getById(req.app.get('db'), req.params.id)
+    	.then(skill => {
+        	if(!skill) {
+            //logger.error(`Level with id ${priority.id} not found.`)
+            	return res.status(404).json({
+                	error: { message: `Skill Not Found`}
+            	})
+        }
+        const { skill_id } = req.body
 
+		const numberOfValues = Object.values(req.body).filter(Boolean).length
+			if (numberOfValues === 0) {
+				return res.status(400).json({
+					error: { message: `Request body must contain 'skill_id'`}
+				})
+			}
+		SkillService.updatePrimaryNameFromExisting(
+			req.app.get('db'),
+			req.params.id,
+			req.body
+			)
+				.then(numRowsAffected => {
+					res.status(204).end()
+				})
+				.catch(next)
+		})
 	})
+
+    //     res.skill = skill
+    //     next()
+    // })
+
+
+// skillRouter
+// 	.route('/skill/:skill') // This route should go in to '/' with query params (?name=foo;etc=bar)
+// 	.get((req, res, next) => {
+// 			SkillService.getSkills(req.app.get('db'), req.params.name)
+// 				.then(skills => {
+// 					res.json(skills)
+// 				})
+// 			.catch(next)
+
+// 	})
 module.exports = skillRouter
 
 

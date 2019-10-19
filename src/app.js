@@ -15,7 +15,8 @@ const levelRouter = require('./level/level-router')
 const priorityRouter = require('./priority/priority-router')
 const skillRouter = require('./skill/skill-router')
 const nameRouter = require('./name/name-router')
-// const skillNameRouter = require('./skill/skill-router')
+const primaryNameRouter = require('./name/primary-name-router')
+const allSkillsRouter = require('./view_all_skills/view_all_skills-router')
 // const skillIdRouter = require('./skill/skill-router')
 
 
@@ -33,17 +34,18 @@ app.use(
     })
 );
 
-// app.use('/api/auth', authRouter)
-// app.use('/api/apparatus', apparatusRouter)
-// app.use('/api/age', ageRouter)
+app.use('/api/auth', authRouter)
+app.use('/api/apparatus', apparatusRouter)
+app.use('/api/age', ageRouter)
 app.use('/api/action', actionRouter)
 app.use('/api/class', classRouter)
-// app.use('/api/level', levelRouter)
-// app.use('/api/priority', priorityRouter)
-app.use('/api/alternatename', nameRouter)
+app.use('/api/level', levelRouter)
+app.use('/api/priority', priorityRouter)
+app.use('/api/name/primaryname', primaryNameRouter)
+app.use('/api/name/name', nameRouter)
 app.use('/api/skill', skillRouter)
+app.use('/api/allskills', allSkillsRouter)
 // app.use('api/skill/id/:id', skillRouter)
-// app.use('api/name/:name', skillRouter)
 
 
 

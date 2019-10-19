@@ -4,6 +4,7 @@ const express = require('express')
 const NameService = require('./name-service')
 
 const nameRouter = express.Router()
+const primaryNameRouter = express.Router()
 const jsonParser = express.json()
 const serializeName = name => ({
 	id: name.id,
@@ -48,11 +49,42 @@ nameRouter
 
         res.name = name
         next()
-    })
+    	})
         .catch( error => console.log('caught error ' , error))
     })
+
     .get((req, res, next) => {
         res.json(serializeName(res.name))
+    })
+
+    .delete((req, res, next) => {
+        NameService.deleteName(
+            req.app.get('db'),
+            req.params.id
+        )
+            .then(numRowsAffected => {
+                res.status(204).end()
+            })
+            .catch(next)
+    })
+    .patch(jsonParser, (req, res, next) =>{
+        const { name, skill_id } = req.body
+
+        const numberOfValues = Object.values(req.body).filter(Boolean).length
+            if (numberOfValues === 0) {
+                return res.status(400).json({
+                    error: { message: `Request body must contain 'name'`}
+                })
+            }
+        NameService.updateName(
+            req.app.get('db'),
+            req.params.id,
+            req.body
+            )
+                .then(numRowsAffected => {
+                    res.status(204).end()
+                })
+                .catch(next)
     })
 
 module.exports = nameRouter

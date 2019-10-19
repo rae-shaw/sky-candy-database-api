@@ -1,38 +1,34 @@
-function validate(obj, keys) {
+function validateGet(obj, keys) {
   return keys.map( q => q in obj ? {[q]: obj[q]} : {})
     .reduce((res,o) => Object.assign(res,o), {});
 }
 
+function validatePost
+
 const SkillService = {
-
-
-	basicSkillQuery(knex) {
-		return knex
-			.select('*')
-			.from('all_skills')
-			//.groupBy('skill.id', 'primaryname.name')
-	},
 
 	getSkills(knex, queryParams) {
 		console.log("** ** ** ", queryParams)
-		newParams = validate(queryParams, ['action', 'age', 'apparatus', 'level', 'class', 'name'])		
+		newParams = validateGet(queryParams, ['action', 'age', 'apparatus', 'level', 'class', 'name'])		
 		let query = knex
-			.select('all_skills.*')
 			.from('all_skills')
+			.select('all_skills.*')
 			.where(newParams)
 		return query
+
 	},
 
 	deleteSkill(knex, id){
+		//need to add code so that you can't delete a primary name
    		return knex('skill')
      		.where({ id })
-     		.delete()
+     		.del()
   	},
 
   	getById(knex, id){
    		return knex
      		.from('skill')
-     		.select('*')
+     		.select('id')
      		.where({ id })
      		.first()
   	},
@@ -44,14 +40,13 @@ const SkillService = {
 	},
 
 	addSkill(knex, skillFields) {
-		console.log('skillFields', skillFields)
 		return knex
 		//validate data(ids) from client, use promise, if exist, oK, if not-throw an error
 			.transaction(function(trx) {
 				//insert the primary name into the name table
 				let skillid
 				return trx ('name')
-				.insert({name: skillFields.primaryname})
+				.insert({ name: skillFields.primaryname })
 				.returning('id')
 				.then(function(primaryNameId){
 					//insert insert the name.id from the primaryname insert into the primary_name_id row of the skill table
@@ -83,10 +78,18 @@ const SkillService = {
 					return trx('skill')
 					.where({ id: skillid[0] })
 					.update( skillFields )
+					.returning('*')
 				})
+				// .then( function(primaryNameId) {
+	   //            return trx
+	   //            .select('*')
+	   //            .from('name')
+	   //            .where({ id: primaryNameId[0] })
+	   //            .first()
+	   //          })
 			})
 	},
-	
+
 	updatePrimaryNameFromExisting(knex, id, skill_id){
         return knex('skill')
         	.where({ id })
