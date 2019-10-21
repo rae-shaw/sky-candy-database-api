@@ -3,7 +3,7 @@ function validateGet(obj, keys) {
     .reduce((res,o) => Object.assign(res,o), {});
 }
 
-function validatePost
+//function validatePost
 
 const SkillService = {
 
@@ -40,6 +40,7 @@ const SkillService = {
 	},
 
 	addSkill(knex, skillFields) {
+		console.log('************ skillFields', skillFields)
 		return knex
 		//validate data(ids) from client, use promise, if exist, oK, if not-throw an error
 			.transaction(function(trx) {
@@ -80,22 +81,15 @@ const SkillService = {
 					.update( skillFields )
 					.returning('*')
 				})
-				// .then( function(primaryNameId) {
-	   //            return trx
-	   //            .select('*')
-	   //            .from('name')
-	   //            .where({ id: primaryNameId[0] })
-	   //            .first()
-	   //          })
-			})
+		})
 	},
 
-	updatePrimaryNameFromExisting(knex, id, skill_id){
-        return knex('skill')
-        	.where({ id })
-        	.update({ primary_name_id: skill_id })
+	// updatePrimaryNameFromExisting(knex, id, skill_id){
+ //        return knex('skill')
+ //        	.where({ id })
+ //        	.update({ primary_name_id: skill_id })
 
-    }
+ //    }
 }
 
 						
