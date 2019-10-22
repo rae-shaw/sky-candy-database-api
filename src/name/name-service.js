@@ -2,11 +2,31 @@ const NameService = {
   //getAllNames isn't necssary
   //insert service goes through skill table
   deleteName(knex, id){
-   return knex('name')
-     .where({ id })
-     .delete()
+    return knex
+        .transaction(function(trx) {
+            console.log('GETTING TO 1st TRX')
+            return trx
+                .select('primary_name_id')
+                .from('skill')
+                .where({ primary_name_id : id })
+                .returning('*')
+                .then(function(ids){
+                    console.log('****************', ids.length)
+                    
+                    if (ids.length !== 0){
+                        return ( 'Cannot delete, name is a primary name')
+                    }else{
+                        return trx
+                            .select('*')
+                            .from('name')
+                            .where({ id })
+                            .delete() 
+                    }
+                })
+        })
   },
   getById(knex, id){
+    console.log('GETBYID')
    return knex
      .from('name')
      .select('*')

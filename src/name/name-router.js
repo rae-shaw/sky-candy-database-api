@@ -48,6 +48,7 @@ nameRouter
         }
 
         res.name = name
+        console.log('************************* name',name)
         next()
     	})
         .catch( error => console.log('caught error ' , error))

@@ -134,7 +134,7 @@ describe('name Endpoints', function() {
 			})
 		})
 	})
-	describe('DELETE /api/name/name/:id', () => {
+	describe.only('DELETE /api/name/name/:id', () => {
 		context(`Given no names`, () => {
 			it(`responds 404 when the name doesn't exist`, () => {
 				return supertest(app)
@@ -168,7 +168,7 @@ describe('name Endpoints', function() {
 			})
 
 			it('removes the name by ID', () => {
-				const idToRemove = 2
+				const idToRemove = 3
 				const expectedNames = testNames.filter(name => name.id !== idToRemove)
 					return supertest(app)
 					.delete(`/api/name/name/${idToRemove}`)

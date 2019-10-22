@@ -21,14 +21,13 @@ skillRouter
 
 	.post(jsonParser, (req, res, next) => {
 		const { primaryname, alt_names, action, age, apparatus, cs, level, priority, details, prerequisites, warm_up, video } = req.body
-
-			for(const [key,value] of Object.entries(req.body)) {
-			if (value == null) {
+			if (primaryname == undefined) {
+			// for(const [key,value] of Object.entries(req.body)) {
+			// if (value == null) {
 				return res.status(400).json({
 					error: { message: `Need at least one field to add in request body`}
 				})
 			}
-		}
 		SkillService.addSkill(
 			req.app.get('db'),
 			req.body

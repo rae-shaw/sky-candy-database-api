@@ -85,18 +85,26 @@ describe('skill Endpoints', function() {
 					}
 				]
 				return supertest(app)
-					.get('/api/skill?name=singlekneespin&age=adult')
+					.get('/api/skill?name=single%20knee%20spin&age=adult')
 					.expect(200)
 					.expect( res => {
-						//console.log('****** res', res)
-						expect(res.body[0]).to.eql(expectedSkill[0])
+						console.log('****** res.body', res.body[0])
+						expect(res.body[0].apparatus).to.eql(expectedSkill[0].apparatus)
+						expect(res.body[0].level).to.eql(expectedSkill[0].level)
+						expect(res.body[0].priority).to.eql(expectedSkill[0].priority)
+						expect(res.body[0].class).to.eql(expectedSkill[0].class)
+						expect(res.body[0].action).to.eql(expectedSkill[0].action)
+						expect(res.body[0].details).to.eql(expectedSkill[0].details)
+						expect(res.body[0].prerequisites).to.eql(expectedSkill[0].prerequisites)
+						expect(res.body[0].warm_up).to.eql(expectedSkill[0].warm_up)
+						expect(res.body[0].video).to.eql(expectedSkill[0].video)
 						expect(res.body[0]).to.have.property("id")
 					})
 			})
 		})
 	})
 
-	describe.only(`POST /api/skill`, () => {
+	describe(`POST /api/skill`, () => {
 		context('Given there are skills in the database', () => {
 			const testApparatus = helpers.makeApparatusArray()
 			const testAge = helpers.makeAgeArray()
@@ -118,7 +126,7 @@ describe('skill Endpoints', function() {
 				await db.insert(testSkills).into('skill').returning('*').catch(function(error) { console.error(error); })
 				return await db('name').whereIn( 'id', [ 1, 2, 3] ).update({ skill_id: 1}).returning('*').catch(function(error) { console.error(error); })
 			})
-			it(`responds with 400 missing 'priority' if not supplied`, () => {
+			it(`responds with 400 missing 'skill' if not supplied`, () => {
 				const newSkillMissingFields = {
 
 				}
@@ -132,7 +140,7 @@ describe('skill Endpoints', function() {
 			it('creates an skill, responding with a 201 and the new skill', () => {
 				const newSkill ={
 					primaryname: 'new name',
-					alt_names: ['new name 2', 'new name 3'],
+					//alt_names: ['new name 2', 'new name 3'],
 					//apparatus_id: 1
 					prerequisites: 'awesome warm-ups'
 				}
@@ -146,9 +154,10 @@ describe('skill Endpoints', function() {
 					})
 					.then(res => {
 						return supertest(app)
-						.get(`/api/skill/id/${res.body.id}`)
-						.expect(res.body)
+						.get(`/api/skill/id/${res.body[0].id}`)
+						.expect(res.body[0])
 					})
+				
 			})
 		})
 	})
@@ -188,7 +197,7 @@ describe('skill Endpoints', function() {
 			it('GET /api/skill/id/:id responds with 200 and the specified priority', () => {
 				const skillId = 2
 				const expectedSkill = testSkills[skillId-1]
-				console.log('expectedSkill', expectedSkill)
+				//console.log('expectedSkill', expectedSkill)
 				return supertest(app)
 					.get(`/api/skill/id/${skillId}`)
 					.expect(200)
@@ -200,7 +209,7 @@ describe('skill Endpoints', function() {
 		})
 	})
 
-	describe('DELETE /api/skill/id/:id', () => {
+	describe.only('DELETE /api/skill/id/:id', () => {
 		context(`Given no skills`, () => {
 			it(`responds 404 when the level doesn't exist`, () => {
 				return supertest(app)

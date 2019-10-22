@@ -3,7 +3,34 @@ function validateGet(obj, keys) {
     .reduce((res,o) => Object.assign(res,o), {});
 }
 
-//function validatePost
+// async function validatePost(db) {
+// 	await db.select('id').from('apparatus').catch(function(error) { console.error(error); })
+// 	await db.select('id').from('age').catch(function(error) { console.error(error); })
+// 	await db.select('id').from('action').catch(function(error) { console.error(error); })
+// 	await db.select('id').from('level').catch(function(error) { console.error(error); })
+// 	await db.select('id').from('class').catch(function(error) { console.error(error); })
+// 	return await db.select('id').from('priority').catch(function(error) { console.error(error); })
+
+// db.select('id').from('apparatus').returning('*')
+// 	.then(function(ids){
+// 		if (ids.length > 1){
+// //go one
+// 		}else{
+// 			//throw an error
+// 		}
+// 	})
+
+// 	db.count('id').from('apparatus')
+
+// 	return knex('ingredients').select()
+//         .where('name', val)
+//     .then(function(rows) {
+//         if (rows.length===0) {
+//             // no matching records found
+//             return knex('ingredients').insert({'name': val})
+//         } else {
+// }
+// //select on each table, get one result fine, if 0 then return error
 
 const SkillService = {
 
@@ -19,8 +46,8 @@ const SkillService = {
 	},
 
 	deleteSkill(knex, id){
-		//need to add code so that you can't delete a primary name
    		return knex('skill')
+   			.select('id')
      		.where({ id })
      		.del()
   	},
@@ -28,7 +55,7 @@ const SkillService = {
   	getById(knex, id){
    		return knex
      		.from('skill')
-     		.select('id')
+     		.select('*')
      		.where({ id })
      		.first()
   	},
@@ -65,6 +92,7 @@ const SkillService = {
 				})
 				.then( () => {
 					//insert all the alt_names with the skill_id  into the name table
+					skillFields.alt_names = skillFields.alt_names ? skillFields.alt_names : []
 					const namesToInsert = skillFields.alt_names.map(name => {
 						return {name: name, skill_id: skillid[0]}
 					})

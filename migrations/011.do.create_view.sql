@@ -1,5 +1,5 @@
 CREATE VIEW all_skills as
-SELECT skill.id, primaryname.name, apparatus.apparatus, action.action, age.age, class.class, level.level, priority.priority, array_to_string (array (select name from name where skill.id = name.skill_id and skill.primary_name_id != name.id), ',') as alt_names
+SELECT skill.id, primaryname.name, apparatus.apparatus, action.action, age.age, class.class, level.level, priority.priority, skill.details, skill.prerequisites, skill.warm_up, skill.video, array_to_string (array (select name from name where skill.id = name.skill_id and skill.primary_name_id != name.id), ',') as alt_names
 FROM skill
 JOIN apparatus ON skill.apparatus_id = apparatus.id
 JOIN action ON skill.action_id = action.id
