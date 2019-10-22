@@ -14,7 +14,9 @@ const NameService = {
                     console.log('****************', ids.length)
                     
                     if (ids.length !== 0){
-                        return ( 'Cannot delete, name is a primary name')
+                        
+                        ({ error: {message: 'Cannot delete, name is a primary name'}
+                        })
                     }else{
                         return trx
                             .select('*')
