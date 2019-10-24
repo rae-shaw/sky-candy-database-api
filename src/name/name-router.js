@@ -64,6 +64,7 @@ nameRouter
             req.params.id
         )
             .then(numRowsAffected => {
+                console.log(numRowsAffected)
                 res.status(204).end()
             })
             .catch(next)
