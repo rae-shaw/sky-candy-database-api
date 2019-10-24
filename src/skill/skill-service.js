@@ -41,7 +41,7 @@ const SkillService = {
 		let query = knex
 			.from('all_skills')
 			.select('all_skills.*')
-			.where(queryParams)
+			.where(newParams)
 		return query
 
 	},
