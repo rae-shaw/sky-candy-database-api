@@ -53,6 +53,7 @@ app.use('/api/allskills', allSkillsRouter)
 app.use(function errorHandler(error, req, res, next) {
 	let response
 	if (NODE_ENV === 'production') {
+		logger.error(error)
 		response = { error: { message: 'server error' } }
 	} else {
 		console.error(error)
