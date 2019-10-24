@@ -13,7 +13,6 @@ allSkillsRouter
 		SkillService.getSkills(knexInstance, req.query)
 			.then(skills => {
 				res.json(skills)
-				//console.log('*********res.body', res.body)
 			})
 
 		.catch(next)

@@ -36,10 +36,11 @@ const SkillService = {
 
 	getSkills(knex, queryParams) {
 		console.log("** ** ** ", queryParams)
-		newParams = validateGet(queryParams, ['action', 'age', 'apparatus', 'level', 'class', 'name'])		
+		newParams = validateGet(queryParams, ['action', 'age', 'apparatus', 'level', 'class', 'name'])
+		console.log('newParams!', newParams)		
 		let query = knex
 			.from('all_skills')
-			.select('all_skills.*')
+			.select('*')
 			.where(newParams)
 		return query
 
