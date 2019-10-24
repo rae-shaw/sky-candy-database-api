@@ -63,9 +63,12 @@ nameRouter
             req.app.get('db'),
             req.params.id
         )
-            .then(numRowsAffected => {
-                console.log(numRowsAffected)
+            .then(deleteResponse => {
+               if (deleteResponse.error) {
+                res.status(400).json(deleteResponse)
+               }else{
                 res.status(204).end()
+                }
             })
             .catch(next)
     })
