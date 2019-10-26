@@ -65,6 +65,7 @@ const SkillService = {
 		return knex
 
 		.transaction(function(trx) {
+				let skillid
 				//insert the alternate names into the name table
 				updatedFields.alt_names = updatedFields.alt_names ? updatedFields.alt_names : []
 					const namesToInsert = updatedFields.alt_names.map(name => {
@@ -72,13 +73,14 @@ const SkillService = {
 					})
 					return trx
 						.insert( namesToInsert )
-						.into('name')												
+						.into('name')
+						.returning('skill_id')												
 					.then( () => {
-						console.log('******** skill.id[0]', skill.id[0])
+						skillid = skill_id
 						//delete alt_names and primaryname from skillFields and insert the rest of the fields into the skill table
 						delete updatedFields.alt_names
 						return trx('skill')
-						.where({ id: skillid[0] })
+						.where({ id: skill_id })
 						.update( updatedFields )
 						.returning('*')
 					})
