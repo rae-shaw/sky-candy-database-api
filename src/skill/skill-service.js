@@ -61,29 +61,28 @@ const SkillService = {
      		.first()
   	},
   	updateSkill(knex, id, updatedFields){
-  		console.log('************ updatedFields', updatedFields)
-		return knex('name')
+  		console.log('************ changed updatedFields', updatedFields)
+		return knex
 
 		.transaction(function(trx) {
 				//insert the alternate names into the name table
-				return trx ('name')
 				skillFields.alt_names = skillFields.alt_names ? skillFields.alt_names : []
 					const namesToUpdate = skillFields.alt_names.map(name => {
 						return {name: name, skill_id: skillid[0]}
 					})
 					return trx
 						.update( namesToUpdate )
-						.into('name')
-				})												
-				.then( () => {
-					console.log('******** skill.id[0]', skill.id[0])
-					//delete alt_names and primaryname from skillFields and insert the rest of the fields into the skill table
-					delete skillFields.alt_names
-					return trx('skill')
-					.where({ id: skillid[0] })
-					.update( skillFields )
-					.returning('*')
-				})
+						.into('name')												
+					.then( () => {
+						console.log('******** skill.id[0]', skill.id[0])
+						//delete alt_names and primaryname from skillFields and insert the rest of the fields into the skill table
+						delete skillFields.alt_names
+						return trx('skill')
+						.where({ id: skillid[0] })
+						.update( skillFields )
+						.returning('*')
+					})
+		})
 	},
 
 	addSkill(knex, skillFields) {
