@@ -67,12 +67,11 @@ const SkillService = {
 		.transaction(function(trx) {
 				//insert the alternate names into the name table
 				updatedFields.alt_names = updatedFields.alt_names ? updatedFields.alt_names : []
-					const namesToUpdate = updatedFields.alt_names.map(name => {
+					const namesToInsert = updatedFields.alt_names.map(name => {
 						return {name: name, skill_id: updatedFields.id}
-						console.log(namesToUpdate)
 					})
 					return trx
-						.update( namesToUpdate )
+						.insert( namesToInsert )
 						.into('name')												
 					.then( () => {
 						console.log('******** skill.id[0]', skill.id[0])
