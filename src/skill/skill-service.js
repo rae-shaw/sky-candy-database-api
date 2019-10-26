@@ -75,7 +75,7 @@ const SkillService = {
 						.insert( namesToInsert )
 						.into('name')
 						.returning('skill_id')												
-					.then(function(skill_id) => {
+					.then(function(skill_id) {
 						skillid = skill_id
 						//delete alt_names and primaryname from skillFields and insert the rest of the fields into the skill table
 						delete updatedFields.alt_names
