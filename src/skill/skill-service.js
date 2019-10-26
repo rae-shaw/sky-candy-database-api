@@ -66,8 +66,8 @@ const SkillService = {
 
 		.transaction(function(trx) {
 				//insert the alternate names into the name table
-				skillFields.alt_names = skillFields.alt_names ? skillFields.alt_names : []
-					const namesToUpdate = skillFields.alt_names.map(name => {
+				skillFields.alt_names = updatedFields.alt_names ? updatedFields.alt_names : []
+					const namesToUpdate = updatedFields.alt_names.map(name => {
 						return {name: name, skill_id: skillid[0]}
 					})
 					return trx
@@ -76,10 +76,10 @@ const SkillService = {
 					.then( () => {
 						console.log('******** skill.id[0]', skill.id[0])
 						//delete alt_names and primaryname from skillFields and insert the rest of the fields into the skill table
-						delete skillFields.alt_names
+						delete updatedFields.alt_names
 						return trx('skill')
 						.where({ id: skillid[0] })
-						.update( skillFields )
+						.update( updatedFields )
 						.returning('*')
 					})
 		})
