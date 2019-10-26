@@ -68,7 +68,7 @@ const SkillService = {
 				//insert the alternate names into the name table
 				updatedFields.alt_names = updatedFields.alt_names ? updatedFields.alt_names : []
 					const namesToUpdate = updatedFields.alt_names.map(name => {
-						return {name: name, skill_id: skillid[0]}
+						return {name: name, skill_id: updatedFields.id}
 					})
 					return trx
 						.update( namesToUpdate )
