@@ -1,5 +1,4 @@
-ALTER TABLE name
-drop constraint if exists name_skill_id_fkey;
+ALTER TABLE name DROP skill_id CASCADE;
 
 
 
