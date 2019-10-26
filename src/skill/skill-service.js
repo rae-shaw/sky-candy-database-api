@@ -69,9 +69,9 @@ const SkillService = {
 				updatedFields.alt_names = updatedFields.alt_names ? updatedFields.alt_names : []
 					const namesToUpdate = updatedFields.alt_names.map(name => {
 						return {name: name, skill_id: updatedFields.id}
+						console.log(namesToUpdate)
 					})
 					return trx
-					console.log(namesToUpdate)
 						.update( namesToUpdate )
 						.into('name')												
 					.then( () => {
