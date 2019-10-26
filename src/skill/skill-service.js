@@ -61,7 +61,8 @@ const SkillService = {
      		.first()
   	},
   	updateSkill(knex, id, updatedFields){
-		return knex('skill')
+  		console.log('************ updatedFields', updatedFields)
+		return knex('name')
 
 		.transaction(function(trx) {
 				//insert the alternate names into the name table
