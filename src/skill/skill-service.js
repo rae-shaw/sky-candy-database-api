@@ -71,6 +71,7 @@ const SkillService = {
 						return {name: name, skill_id: updatedFields.id}
 					})
 					return trx
+					console.log(namesToUpdate)
 						.update( namesToUpdate )
 						.into('name')												
 					.then( () => {
