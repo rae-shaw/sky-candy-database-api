@@ -125,21 +125,6 @@ skillRouter
 		})
 	})
 
-    //     res.skill = skill
-    //     next()
-    // })
-
-
-// skillRouter
-// 	.route('/skill/:skill') // This route should go in to '/' with query params (?name=foo;etc=bar)
-// 	.get((req, res, next) => {
-// 			SkillService.getSkills(req.app.get('db'), req.params.name)
-// 				.then(skills => {
-// 					res.json(skills)
-// 				})
-// 			.catch(next)
-
-// 	})
 module.exports = skillRouter
 
 

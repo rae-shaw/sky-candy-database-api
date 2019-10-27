@@ -87,6 +87,14 @@ const SkillService = {
 		})
 	},
 
+	getViewById(knex, id){
+   		return knex
+     		.from('all_skills')
+     		.select('all_skills.*')
+     		.where({ id })
+     		.first()
+  	},
+	
 	addSkill(knex, skillFields) {
 		console.log('************ skillFields', skillFields)
 		return knex
