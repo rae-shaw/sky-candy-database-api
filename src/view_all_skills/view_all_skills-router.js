@@ -20,18 +20,36 @@ allSkillsRouter
 
 allSkillsRouter
 	.route('/id/:id') // This route is for returning exactly 1 result, NOT a list
-	.get((req, res, next) => {
+	// .get((req, res, next) => {
+	// 	SkillService.getViewById(req.app.get('db'), req.params.id)
+ //    	.then(skill => {
+ //        	if(!skill) {
+ //            //logger.error(`Level with id ${priority.id} not found.`)
+ //            	return res.status(404).json({
+ //                	error: { message: `Skill Not Found`}
+ //            	})
+ //        	}
+ //    		res.json(res.skill)
+ //    	})
+ //        .catch( error => console.log('caught error ' , error))
+ //    })
+ 	.all((req, res, next) => {
 		SkillService.getViewById(req.app.get('db'), req.params.id)
-    	.then(skill => {
-        	if(!skill) {
-            //logger.error(`Level with id ${priority.id} not found.`)
-            	return res.status(404).json({
-                	error: { message: `Skill Not Found`}
-            	})
-        	}
-    		res.json(res.skill)
-    	})
-        .catch( error => console.log('caught error ' , error))
-    })
+			.then(skill => {
+				if(!skill) {
+					//logger.error(`Apparatus with id ${apparatus.id} not found.`)
+					return res.status(404).json({
+						error: { message: `Apparatus Not Found`}
+					})
+				}
+				res.skill = skill
+				next()
+			})
+			.catch( error => console.log('caught error ' , error))
+		})
+
+	.get((req, res, next) => {
+		res.json(res.skill)
+	})
 
 module.exports = allSkillsRouter
