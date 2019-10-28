@@ -136,7 +136,7 @@ const SkillService = {
 					return trx('skill')
 					.where({ id: skillid[0] })
 					.update( skillFields )
-					.returning('*')
+					.returning('id')
 				})
 		})
 	},

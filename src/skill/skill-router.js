@@ -76,7 +76,7 @@ skillRouter
 
     .patch(jsonParser, (req, res, next) =>{
 		const { skill } = req.body
-		console.log(req.body)
+		console.log('PATCH REQUEST', req.body)
 
 		const numberOfValues = Object.values(req.body).filter(Boolean).length
 			if (numberOfValues === 0) {
