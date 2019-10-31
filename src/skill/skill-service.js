@@ -13,7 +13,7 @@ const SkillService = {
 			.from('all_skills')
 			.select('all_skills.*')
 			//.where(newParams)
-			.whereRaw(`LOWER(${name}) LIKE ?`, [`%${name}%`])
+			.whereRaw(`LOWER(${newParams.name}) LIKE ?`, [`%${newParams.name}%`])
 			//.andWhere(newParams)
 			//, if no name, default to empty string ||
 		return query
