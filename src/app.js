@@ -1,9 +1,11 @@
 require('dotenv').config()
 const express = require('express')
 const morgan = require('morgan')
-const helmet = require('helmet')
-const { NODE_ENV } = require('./config')
 const cors = require('cors');
+const helmet = require('helmet')
+
+const { NODE_ENV } = require('./config')
+
 const {CLIENT_ORIGIN} = require('./config');
 const logger = require('./logger')
 

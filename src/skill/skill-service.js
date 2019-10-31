@@ -3,35 +3,6 @@ function validateGet(obj, keys) {
     .reduce((res,o) => Object.assign(res,o), {});
 }
 
-// async function validatePost(db) {
-// 	await db.select('id').from('apparatus').catch(function(error) { console.error(error); })
-// 	await db.select('id').from('age').catch(function(error) { console.error(error); })
-// 	await db.select('id').from('action').catch(function(error) { console.error(error); })
-// 	await db.select('id').from('level').catch(function(error) { console.error(error); })
-// 	await db.select('id').from('class').catch(function(error) { console.error(error); })
-// 	return await db.select('id').from('priority').catch(function(error) { console.error(error); })
-
-// db.select('id').from('apparatus').returning('*')
-// 	.then(function(ids){
-// 		if (ids.length > 1){
-// //go one
-// 		}else{
-// 			//throw an error
-// 		}
-// 	})
-
-// 	db.count('id').from('apparatus')
-
-// 	return knex('ingredients').select()
-//         .where('name', val)
-//     .then(function(rows) {
-//         if (rows.length===0) {
-//             // no matching records found
-//             return knex('ingredients').insert({'name': val})
-//         } else {
-// }
-// //select on each table, get one result fine, if 0 then return error
-
 const SkillService = {
 
 	getSkills(knex, queryParams) {
@@ -41,7 +12,10 @@ const SkillService = {
 		let query = knex
 			.from('all_skills')
 			.select('all_skills.*')
-			.where(newParams)
+			//.where(newParams)
+			.whereRaw(`LOWER(name) LIKE ?`, [`%${NAMETOSEARCHFOR}%`])
+			.andWhere(newParams)
+			//, if no name, default to empty string ||
 		return query
 
 	},
