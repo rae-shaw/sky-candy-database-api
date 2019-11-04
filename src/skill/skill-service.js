@@ -8,12 +8,13 @@ const SkillService = {
 	getSkills(knex, queryParams) {
 		console.log("** ** ** ", queryParams)
 		newParams = validateGet(queryParams, ['action', 'age', 'apparatus', 'level', 'class', 'name'])
+		const name = newParams.name ? newParams.name : ''
+		delete newParams.name
 		console.log('newParams!', newParams)		
 		let query = knex
 			.from('all_skills')
 			.select('all_skills.*')
-			//.where(newParams)
-			.whereRaw(`LOWER(name) LIKE ?`, [`%${newParams.name}%`])
+			.whereRaw(`LOWER(name) LIKE ?`, [`%${name}%`])
 			.andWhere(newParams)
 			//, if no name, default to empty string ||
 		return query
