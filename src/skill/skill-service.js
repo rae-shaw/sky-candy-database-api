@@ -12,8 +12,8 @@ const SkillService = {
 		let query = knex
 			.from('all_skills')
 			.select('all_skills.*')
-			.where(newParams)
-			// .whereRaw(`LOWER(${newParams.name}) LIKE ?`, [`%${newParams.name}%`])
+			//.where(newParams)
+			.whereRaw(`LOWER(name) LIKE ?`, [`%${newParams.name}%`])
 			//.andWhere(newParams)
 			//, if no name, default to empty string ||
 		return query
