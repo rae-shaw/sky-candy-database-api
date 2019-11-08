@@ -1,6 +1,5 @@
 const path = require('path')
 const express = require('express')
-//const xss = require('xss')
 const SkillService = require('../skill/skill-service')
 
 const allSkillsRouter = express.Router()
@@ -24,7 +23,6 @@ allSkillsRouter
 		SkillService.getViewById(req.app.get('db'), req.params.id)
 			.then(skill => {
 				if(!skill) {
-					//logger.error(`Apparatus with id ${apparatus.id} not found.`)
 					return res.status(404).json({
 						error: { message: `Apparatus Not Found`}
 					})

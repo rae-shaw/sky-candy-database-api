@@ -10,6 +10,16 @@ Eventually, on a larger scope, there will be differentiated log-ins for teachers
 
 On the database side, I built services and routers to eventually handle the above additions to the client-side. In other words, the database, including the number of tables, was created with eventual growth in mind.
 
+Screenshots
+-----------
+![Landing Page](LandingPage.png "Landing Page")
+
+![Add Skill Page](AddSkill.png "Add Skill Page")
+
+![Search Page](SearchPage.png "Search Page")
+
+Live [Link](https://sky-candy-database.rachaelleeshaw.now.sh)
+
 
 Built with:
 -----------
