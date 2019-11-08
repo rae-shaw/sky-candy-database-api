@@ -74,9 +74,7 @@ describe('name Endpoints', function() {
 					expect(res.body.skill_id).to.eql(newName.skill_id)
 					expect(res.body).to.have.property('id')
 				})
-				console.log('******res.body1', res.body)
 				.then(res => {
-					console.log('******res.body2', res.body)
 					return supertest(app)
 					.get(`/api/name/name/${res.body.id}`)
 					.expect(res.body)
@@ -121,12 +119,10 @@ describe('name Endpoints', function() {
 			it('GET /api/name/:id responds with 200 and the specified name', () => {
 				const nameId = 2
 				const expectedName = testNames[nameId-1]
-				console.log('expectedName', expectedName)
 				return supertest(app)
 					.get(`/api/name/name/${nameId}`)
 					.expect(200)
 					.expect( res => {
-						console.log('res body name', res.body.name)
 						expect(res.body.name).to.eql(expectedName.name)
 						expect(res.body).to.have.property('id')
 						expect(res.body).to.have.property('skill_id')
@@ -172,7 +168,6 @@ describe('name Endpoints', function() {
 				const expectedNames = testNames.filter(name => name.id !== idToRemove)
 					return supertest(app)
 					.delete(`/api/name/name/${idToRemove}`)
-					console.log('id', idToRemove)
 					.expect(204)
 					.then(() => {
 						return supertest(app)

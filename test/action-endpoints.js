@@ -40,13 +40,11 @@ describe('action Endpoints', function() {
 
 
 			it('GET /api/action responds with 200 and all of the actions', () => {
-				console.log ('test actions', testActions)
 				return supertest(app)
 					.get('/api/action/')
 					.expect(200)
 					.expect( res => {
 						expect(res.body.action).to.eql(testActions.action)
-						//expect(res.body).to.have.property('id')
 					})
 			})
 				
@@ -117,7 +115,6 @@ describe('action Endpoints', function() {
 					.expect(200)
 					.expect( res => {
 						expect(res.body.action).to.eql(expectedAction.action)
-						//expect(res.body).to.have.property('id')
 					})
 			})
 		})

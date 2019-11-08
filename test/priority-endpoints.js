@@ -45,7 +45,6 @@ describe('priority Endpoints', function() {
 					.expect(200)
 					.expect( res => {
 						expect(res.body.priority).to.eql(testPriorities.priority)
-						//expect(res.body).to.have.property('id')
 					})
 			})
 				

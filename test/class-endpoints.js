@@ -45,7 +45,6 @@ describe('class Endpoints', function() {
 					.expect(200)
 					.expect( res => {
 						expect(res.body.class).to.eql(testClasses.class)
-						//expect(res.body).to.have.property('id')
 					})
 			})
 				

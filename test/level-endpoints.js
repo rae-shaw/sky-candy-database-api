@@ -45,7 +45,6 @@ describe('level Endpoints', function() {
 					.expect(200)
 					.expect( res => {
 						expect(res.body.level).to.eql(testLevels.level)
-						//expect(res.body).to.have.property('id')
 					})
 			})
 				
@@ -106,7 +105,6 @@ describe('level Endpoints', function() {
 			it('GET /api/level/:id responds with 200 and the specified level', () => {
 				const levelId = 2
 				const expectedLevel = testLevels[levelId-1]
-				console.log('expectedLevel', expectedLevel)
 				return supertest(app)
 					.get(`/api/level/${levelId}`)
 					.expect(200)

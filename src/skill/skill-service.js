@@ -16,7 +16,6 @@ const SkillService = {
 			.select('all_skills.*')
 			.whereRaw(`LOWER(name) LIKE ?`, [`%${name}%`])
 			.andWhere(newParams)
-			//, if no name, default to empty string ||
 		return query
 
 	},
@@ -36,11 +35,8 @@ const SkillService = {
      		.first()
   	},
   	updateSkill(knex, id, updatedFields){
-  		console.log('************ changed updatedFields', updatedFields)
 		return knex
-
 		.transaction(function(trx) {
-				//let skillid
 				//insert the alternate names into the name table
 				updatedFields.alt_names = updatedFields.alt_names ? updatedFields.alt_names : []
 					const namesToInsert = updatedFields.alt_names.map(name => {
@@ -51,7 +47,6 @@ const SkillService = {
 						.into('name')
 						.returning('skill_id')												
 					.then( () => {
-						//skillid = skill_id
 						//delete alt_names and primaryname from skillFields and insert the rest of the fields into the skill table
 						delete updatedFields.alt_names
 						return trx('skill')
@@ -115,13 +110,6 @@ const SkillService = {
 				})
 		})
 	},
-
-	// updatePrimaryNameFromExisting(knex, id, skill_id){
- //        return knex('skill')
- //        	.where({ id })
- //        	.update({ primary_name_id: skill_id })
-
- //    }
 }
 
 						

@@ -1,26 +1,28 @@
-# Express Boilerplate!
+Sky Candy Curriculum Database API
+=========================================
 
-This is a boilerplate project used for starting new projects!
 
-## Set up
+Summary
+-------
+Built for Sky Candy Austin, an aerial studio in Austin, TX, this will hold all of the curriculum for the aerial classes. Sky Candy staff will be able to access, add, delete and update skills. Skills can be searched by a variety of filters including age, level, name, and apparatus.
 
-Complete the following steps to start a new project (NEW-PROJECT-NAME):
+Eventually, on a larger scope, there will be differentiated log-ins for teachers, admin, and front desk staff with different levels of access. There will also be the ability to update, add, or delete from tables other than just the skills table. 
 
-1. Clone this repository to your local machine `git clone https://github.com/rae-shaw/express-boilerplate NEW-PROJECTS-NAME`
-2. `cd` into the cloned repository
-3. Make a fresh start of the git history for this project with `rm -rf .git && git init`
-4. Install the node dependencies `npm install`
-5. Move the example Environment file to `.env` that will be ignored by git and read by the express server `mv example.env .env`
-6. Edit the contents of the `package.json` to use NEW-PROJECT-NAME instead of `"name": "express-boilerplate",`
+On the database side, I built services and routers to eventually handle the above additions to the client-side. In other words, the database, including the number of tables, was created with eventual growth in mind.
 
-## Scripts
 
-Start the application `npm start`
+Built with:
+-----------
+Client-side
+* HTML5
+* CSS
+* JavaScript
+* React
 
-Start nodemon for the application `npm run dev`
-
-Run the tests `npm test`
-
-## Deploying
-
-When your new project is ready for deployment, add a new Heroku application with `heroku create`. This will make a new git remote called "heroku" and you can then `npm run deploy` which will push to this remote's master branch.
+Server-side
+* Node
+* Knex
+* Express
+* PostgreSQL
+* Heroku
+* Zeit

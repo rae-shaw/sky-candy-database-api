@@ -1,6 +1,5 @@
 const path = require('path')
 const express = require('express')
-//const xss = require('xss')
 const AgeService = require('./age-service')
 
 const ageRouter = express.Router()
@@ -46,7 +45,6 @@ ageRouter
 		AgeService.getById(req.app.get('db'), req.params.id)
 			.then(age => {
 				if(!age) {
-					//logger.error(`Apparatus with id ${apparatus.id} not found.`)
 					return res.status(404).json({
 						error: { message: `Age Not Found`}
 					})

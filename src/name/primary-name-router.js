@@ -1,12 +1,10 @@
 const path = require('path')
 const express = require('express')
-//const xss = require('xss')
 const NameService = require('./name-service')
 
 const primaryNameRouter = express.Router()
 const jsonParser = express.json()
 const serializeName = name => ({
-	//id: name.id,
 	name: name.name,
 	skill_id: name.skill_id,
 })

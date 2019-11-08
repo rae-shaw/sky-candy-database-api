@@ -46,7 +46,6 @@ describe('apparatus Endpoints', function() {
 					.expect(200)
 					.expect( res => {
 						expect(res.body.apparatus).to.eql(testApparatus.apparatus)
-						//expect(res.body).to.have.property('id')
 					})
 			})
 				
@@ -56,15 +55,9 @@ describe('apparatus Endpoints', function() {
 		const testApparatus = helpers.makeApparatusArray()
 		beforeEach('insert apparatus', async function() {
 			return await db.insert(testApparatus).into('apparatus').returning('id')
-			// 	.then( res => {
-			// 		console.log(res)
-			// 	})
-			// process.exit(0)
-			// console.log("DONE")
 		})
 		it(`responds with 400 missing 'apparatus' if not supplied`, () => {
 			const newApparatusMissingApparatus = {
-				//apparatus: 'new apparatus'
 			}
 			return supertest(app)
 				.post(`/api/apparatus`)
@@ -85,18 +78,13 @@ describe('apparatus Endpoints', function() {
 				.expect( res => {
 					expect(res.body.apparatus).to.eql(newApparatus.apparatus)
 					expect(res.body).to.have.property('id')
-					console.log('res.body', res.body)
 				})
 				.then(res => {
-					console.log("Getting here", res.body)
 					return supertest(app)
 					.get(`/api/apparatus/${res.body.id}`)
 				 	.expect(200)
 					.expect(res.body)
-					console.log("also here")
 				})
-
-			
 		})
 	})
 
@@ -154,7 +142,6 @@ describe('apparatus Endpoints', function() {
 				const expectedApparatus = testApparatus.filter(ap => ap.id !== idToRemove)
 					return supertest(app)
 					.delete(`/api/apparatus/${idToRemove}`)
-					console.log('id', idToRemove)
 					.expect(204)
 					.then(() =>
 						supertest(app)
@@ -187,8 +174,6 @@ describe('apparatus Endpoints', function() {
 				const updateApparatus = {
 					apparatus: 'updated apparatus',
 				}
-				console.log('updateApparatus', updateApparatus)
-				console.log('idToUpdate', idToUpdate)
 				const expectedApparatus = {
 					...testApparatus[idToUpdate - 1],
 					...updateApparatus

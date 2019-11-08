@@ -47,13 +47,6 @@ describe('skill Endpoints', function() {
 
 		
 			beforeEach('insert data in skills and names', async function(){
-				// testData (db, data, table) {
-				// 	return await db.insert(data).into(table).returning('id').catch(function(error) { console.error(error); })
-				// }
-
-				// testData(db, testApparatus, 'apparatus')
-				// testData(db, testAction,    'action')
-				// testData(db, testAge,       'age')
 				await db.insert(testApparatus) .into('apparatus') .catch(function(error) { console.error(error); })
 				await db.insert(testAction)    .into('action')    .catch(function(error) { console.error(error); })
 				await db.insert(testAge)       .into('age')       .catch(function(error) { console.error(error); })
@@ -64,8 +57,6 @@ describe('skill Endpoints', function() {
 
 				await db.insert(testSkills)    .into('skill')    .returning('*')  .catch(function(error) { console.error(error); })
 				return await db('name').whereIn( 'id', [ 1, 2, 3] ).update({ skill_id: 1}).returning('*').catch(function(error) { console.error(error); })
-				 // let allSkills = await db.select('*').from('all_skills')
-				// console.log("*****allSkills*****", allSkills)
 			})
 
 			it('GET /api/skill responds with 200 and all of the skills', () => {
@@ -140,8 +131,6 @@ describe('skill Endpoints', function() {
 			it('creates an skill, responding with a 201 and the new skill', () => {
 				const newSkill ={
 					primaryname: 'new name',
-					//alt_names: ['new name 2', 'new name 3'],
-					//apparatus_id: 1
 					prerequisites: 'awesome warm-ups'
 				}
 				return supertest(app)
@@ -183,21 +172,20 @@ describe('skill Endpoints', function() {
 			const testNames = helpers.makeNameArray()
 
 			beforeEach('insert data in skills and names', async function(){
-				await db.insert(testApparatus).into('apparatus').returning('id').catch(function(error) { console.error(error); })
-				await db.insert(testAction).into('action').returning('id').catch(function(error) { console.error(error); })
-				await db.insert(testAge).into('age').returning('id').catch(function(error) { console.error(error); })
-				await db.insert(testLevel).into('level').returning('id').catch(function(error) { console.error(error); })
-				await db.insert(testClass).into('class').returning('id').catch(function(error) { console.error(error); })
-				await db.insert(testPriority).into('priority').returning('id').catch(function(error) { console.error(error); })
-				await db.insert(testNames).into('name').returning('id').catch(function(error) { console.error(error); })
-				await db.insert(testSkills).into('skill').returning('*').catch(function(error) { console.error(error); })
+				await db.insert(testApparatus)	.into('apparatus')	.returning('id')	.catch(function(error) { console.error(error); })
+				await db.insert(testAction)		.into('action')		.returning('id')	.catch(function(error) { console.error(error); })
+				await db.insert(testAge)		.into('age')		.returning('id')	.catch(function(error) { console.error(error); })
+				await db.insert(testLevel)		.into('level')		.returning('id')	.catch(function(error) { console.error(error); })
+				await db.insert(testClass)		.into('class')		.returning('id')	.catch(function(error) { console.error(error); })
+				await db.insert(testPriority)	.into('priority')	.returning('id')	.catch(function(error) { console.error(error); })
+				await db.insert(testNames)		.into('name')		.returning('id')	.catch(function(error) { console.error(error); })
+				await db.insert(testSkills)		.into('skill')		.returning('*')		.catch(function(error) { console.error(error); })
 				return await db('name').whereIn( 'id', [ 1, 2, 3] ).update({ skill_id: 1}).returning('*').catch(function(error) { console.error(error); })
 			})
 
 			it('GET /api/skill/id/:id responds with 200 and the specified priority', () => {
 				const skillId = 2
 				const expectedSkill = testSkills[skillId-1]
-				//console.log('expectedSkill', expectedSkill)
 				return supertest(app)
 					.get(`/api/skill/id/${skillId}`)
 					.expect(200)
@@ -230,14 +218,14 @@ describe('skill Endpoints', function() {
 			const testNames = helpers.makeNameArray()
 
 			beforeEach('insert data in skills and names', async function(){
-				await db.insert(testApparatus).into('apparatus').returning('id').catch(function(error) { console.error(error); })
-				await db.insert(testAction).into('action').returning('id').catch(function(error) { console.error(error); })
-				await db.insert(testAge).into('age').returning('id').catch(function(error) { console.error(error); })
-				await db.insert(testLevel).into('level').returning('id').catch(function(error) { console.error(error); })
-				await db.insert(testClass).into('class').returning('id').catch(function(error) { console.error(error); })
-				await db.insert(testPriority).into('priority').returning('id').catch(function(error) { console.error(error); })
-				await db.insert(testNames).into('name').returning('id').catch(function(error) { console.error(error); })
-				await db.insert(testSkills).into('skill').returning('*').catch(function(error) { console.error(error); })
+				await db.insert(testApparatus)	.into('apparatus')	.returning('id')	.catch(function(error) { console.error(error); })
+				await db.insert(testAction)		.into('action')		.returning('id')	.catch(function(error) { console.error(error); })
+				await db.insert(testAge)		.into('age')		.returning('id')	.catch(function(error) { console.error(error); })
+				await db.insert(testLevel)		.into('level')		.returning('id')	.catch(function(error) { console.error(error); })
+				await db.insert(testClass)		.into('class')		.returning('id')	.catch(function(error) { console.error(error); })
+				await db.insert(testPriority)	.into('priority')	.returning('id')	.catch(function(error) { console.error(error); })
+				await db.insert(testNames)		.into('name')		.returning('id')	.catch(function(error) { console.error(error); })
+				await db.insert(testSkills)		.into('skill')		.returning('*')		.catch(function(error) { console.error(error); })
 				return await db('name').whereIn( 'id', [ 1, 2, 3] ).update({ skill_id: 1}).returning('*').catch(function(error) { console.error(error); })
 			})
 
@@ -246,7 +234,6 @@ describe('skill Endpoints', function() {
 				const expectedSkill = testSkills.filter(skill => skill.id !== idToRemove)
 					return supertest(app)
 					.delete(`/api/skill/id/${idToRemove}`)
-					console.log('id', idToRemove)
 					.expect(204)
 					.then(() => {
 						return supertest(app)
@@ -263,7 +250,6 @@ describe('skill Endpoints', function() {
 				const skillId = 123
 				return supertest(app)
 					.patch(`/api/skill/id/${skillId}`)
-					console.log("**********", skillId)
 					.expect(404, {
 						error: { message: `Skill Not Found`}
 					})

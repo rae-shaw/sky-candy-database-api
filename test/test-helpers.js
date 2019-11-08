@@ -233,8 +233,6 @@ const jwt = require('jsonwebtoken')
     }
 
 
-//.then to update using the returning ids from the makeSkillArray call
-
 module.exports = {
     makeUsersArray,
     makeApparatusArray,

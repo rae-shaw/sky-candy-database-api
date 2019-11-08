@@ -44,7 +44,6 @@ describe('age Endpoints', function() {
 					.expect( res => {
 						expect(res.body.age).to.eql(testAge.age)
 						expect(res.body[0]).to.have.property("id")
-						//.catch(function(error) { console.error(error) }); 
 					})
 			})
 				
@@ -138,7 +137,6 @@ describe('age Endpoints', function() {
 				const expectedAge = testAge.filter(ap => ap.id !== idToRemove)
 					return supertest(app)
 					.delete(`/api/age/${idToRemove}`)
-					console.log('id', idToRemove)
 					.expect(204)
 					.then(() =>
 						supertest(app)

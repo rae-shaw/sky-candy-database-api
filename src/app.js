@@ -20,7 +20,6 @@ const skillRouter = require('./skill/skill-router')
 const nameRouter = require('./name/name-router')
 const primaryNameRouter = require('./name/primary-name-router')
 const allSkillsRouter = require('./view_all_skills/view_all_skills-router')
-// const skillIdRouter = require('./skill/skill-router')
 
 
 const app = express()
@@ -32,9 +31,7 @@ const morganOption = (NODE_ENV === 'production')
 app.use(morgan(morganOption))
 app.use(helmet())
 app.use(
-    cors(
-        //origin: CLIENT_ORIGIN
-    )
+    cors()
 );
 
 app.use('/api/auth', authRouter)
@@ -48,8 +45,6 @@ app.use('/api/name/primaryname', primaryNameRouter)
 app.use('/api/name/name', nameRouter)
 app.use('/api/skill', skillRouter)
 app.use('/api/allskills', allSkillsRouter)
-// app.use('api/skill/id/:id', skillRouter)
-
 
 
 app.use(function errorHandler(error, req, res, next) {

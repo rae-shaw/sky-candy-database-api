@@ -1,6 +1,5 @@
 const path = require('path')
 const express = require('express')
-//const xss = require('xss')
 const ApparatusService = require('./apparatus-service')
 
 const apparatusRouter = express.Router()
@@ -49,7 +48,6 @@ apparatusRouter
 		ApparatusService.getById(req.app.get('db'), req.params.id)
 			.then(apparatus => {
 				if(!apparatus) {
-					//logger.error(`Apparatus with id ${apparatus.id} not found.`)
 					return res.status(404).json({
 						error: { message: `Apparatus Not Found`}
 					})

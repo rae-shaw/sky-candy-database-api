@@ -1,6 +1,5 @@
 const path = require('path')
 const express = require('express')
-//const xss = require('xss')
 const ClassService = require('./class-service')
 
 const classRouter = express.Router()
@@ -47,7 +46,6 @@ classRouter
 		ClassService.getById(req.app.get('db'), req.params.id)
     	.then(cs_id => {
         	if(!cs_id) {
-            //logger.error(`Level with id ${priority.id} not found.`)
             	return res.status(404).json({
                 	error: { message: `Class Not Found`}
             	})

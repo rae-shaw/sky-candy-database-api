@@ -1,6 +1,5 @@
 const path = require('path')
 const express = require('express')
-//const xss = require('xss')
 const ActionService = require('./action-service')
 
 const actionRouter = express.Router()
@@ -46,7 +45,6 @@ actionRouter
 		ActionService.getById(req.app.get('db'), req.params.id)
 			.then(action => {
 				if(!action) {
-					//logger.error(`Apparatus with id ${apparatus.id} not found.`)
 					return res.status(404).json({
 						error: { message: `Action Not Found`}
 					})
