@@ -46,7 +46,7 @@ skillRouter
             	return res.status(404).json({
                 	error: { message: `Skill Not Found`}
             	})
-        }
+        })
 
         res.skill = skill
         next()
